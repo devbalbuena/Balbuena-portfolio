@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #ffffff;
+  color: #1e293b;
+}
+
+.dark body {
+  background-color: #020617;
+  color: #e2e8f0;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Infinite horizontal marquee — translates -50% (one duplicated set) */
+@keyframes gallery-marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.gallery-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+  animation: gallery-marquee-scroll 35s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-marquee-track {
+    animation: none;
+  }
+}
+
+.gallery-marquee-item {
+  width: 16rem; /* matches prior w-64; aligns predictably with heading */
+}
