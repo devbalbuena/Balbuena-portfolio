@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calendar,
   Trophy,
@@ -9,6 +10,7 @@ import {
   Link2 as Linkedin,
   Mail,
   Phone,
+  X,
 } from 'lucide-react';
 import { fadeInUp, staggerContainer } from '../motion/variants';
 import {
@@ -41,6 +43,29 @@ const skillThemes = {
     'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-500/15 dark:text-blue-300 dark:border-white/10',
 };
 
+const certifications = [
+  {
+    title: 'AWS Certified Cloud Practitioner',
+    org: 'Amazon Web Services',
+    image: '/certs/aws.jpg',
+  },
+  {
+    title: 'Frontend Developer Certificate',
+    org: 'Meta',
+    image: '/certs/frontend.jpg',
+  },
+  {
+    title: 'Cyber Resilience Bootcamp 1 – Participation',
+    org: 'Urian Cybersecurity League / FSUU, Sep 2024',
+    image: '/certs/bootcamp.jpg',
+  },
+  {
+    title: 'English Fluency CEFR Level A2',
+    org: 'DynEd International / neo nexgen, Dec 2024',
+    image: '/certs/dyned_english.jpg',
+  },
+];
+
 const skillGroups = [
   {
     label: 'Frontend',
@@ -69,8 +94,27 @@ function SidebarBlock({ icon: Icon, title, children }) {
 }
 
 export default function RightSidebar() {
+  const [certPreview, setCertPreview] = useState(null);
+
+  useEffect(() => {
+    if (!certPreview) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setCertPreview(null);
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [certPreview]);
+
   return (
-    <motion.aside
+    <>
+      <motion.aside
       className="space-y-10 pb-20"
       variants={staggerContainer}
       initial="hidden"
@@ -85,7 +129,7 @@ export default function RightSidebar() {
             BS Information Technology
           </p>
           <p className="text-sm text-gray-600 dark:text-slate-300 mt-2 font-medium">
-            2022 – present
+            2022 – Present (3rd Year Student)
           </p>
         </motion.div>
       </SidebarBlock>
@@ -94,18 +138,42 @@ export default function RightSidebar() {
         <motion.div className={`${cardBase} p-5`} variants={fadeInUp}>
           <ul className="space-y-3">
             {[
-              { title: "Dean's Lister", period: '2022 - 2024' },
-              { title: 'Champion - University Hackathon', period: '2023' },
+              { title: "Dean's Lister", period: '2022–2024' },
+              { title: 'Champion – University Hackathon', period: '2023' },
               { title: 'Outstanding Project Award', period: '2024' },
-              { title: 'Top 10 - Regional Programming Competition', period: '2025' },
+              {
+                title:
+                  '2nd Runner Up – Urian Cybersecurity League Capture the Flag (CTF) Competition',
+                yearInline: '2024',
+                href: '/awards/ctf.jpg',
+              },
+              { title: 'Top 10 – Regional Programming Competition', period: '2025' },
             ].map((item) => (
               <li key={item.title} className="flex flex-col">
                 <span className="font-medium text-slate-800 dark:text-slate-100 text-sm">
-                  {item.title}
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`transition-colors duration-300 ${linkAccent}`}
+                    >
+                      {item.title}
+                    </a>
+                  ) : (
+                    item.title
+                  )}
+                  {item.yearInline && (
+                    <span className="text-gray-500 ml-1 text-xs dark:text-slate-400">
+                      ({item.yearInline})
+                    </span>
+                  )}
                 </span>
-                <span className="text-xs text-gray-600 dark:text-slate-300 mt-0.5">
-                  {item.period}
-                </span>
+                {item.period && (
+                  <span className="text-xs text-gray-600 dark:text-slate-300 mt-0.5">
+                    {item.period}
+                  </span>
+                )}
               </li>
             ))}
           </ul>
@@ -115,27 +183,28 @@ export default function RightSidebar() {
       <SidebarBlock icon={Award} title="Certifications">
         <motion.div className={`${cardBase} p-5`} variants={fadeInUp}>
           <ul className="space-y-4">
-            {[
-              {
-                title: 'AWS Certified Cloud Practitioner',
-                org: 'Amazon Web Services',
-              },
-              { title: 'Frontend Developer Certificate', org: 'Meta' },
-            ].map((cert) => (
+            {certifications.map((cert) => (
               <li key={cert.title}>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="font-medium text-slate-800 dark:text-slate-100 text-sm">
+                <div className="flex justify-between items-start gap-3">
+                  <div className="min-w-0 flex-1 pr-1">
+                    <button
+                      type="button"
+                      onClick={() => setCertPreview({ src: cert.image, title: cert.title })}
+                      className={`block text-left font-medium text-slate-800 dark:text-slate-100 text-sm ${linkAccent}`}
+                    >
                       {cert.title}
-                    </h4>
-                    <p className="text-xs text-gray-600 dark:text-slate-300 mt-1">{cert.org}</p>
+                    </button>
+                    <span className="text-gray-500 block text-xs mt-0.5 dark:text-slate-400">
+                      {cert.org}
+                    </span>
                   </div>
-                  <a
-                    href="#"
-                    className={`text-xs text-gray-600 dark:text-slate-300 shrink-0 ${linkAccent}`}
+                  <button
+                    type="button"
+                    onClick={() => setCertPreview({ src: cert.image, title: cert.title })}
+                    className={`text-xs text-gray-600 dark:text-slate-300 shrink-0 pt-0.5 ${linkAccent}`}
                   >
                     View
-                  </a>
+                  </button>
                 </div>
               </li>
             ))}
@@ -170,14 +239,14 @@ export default function RightSidebar() {
           {[
             { href: 'tel:+639912131795', icon: Phone, label: '+63 991 213 1795' },
             {
-              href: 'mailto:dexterbalbuena@email.com',
+              href: 'mailto:balbuenadexter2@gmail.com',
               icon: Mail,
-              label: 'dexterbalbuena@email.com',
+              label: 'balbuenadexter2@gmail.com',
             },
             {
-              href: 'https://github.com/dexterbalbuena',
+              href: 'https://github.com/devbalbuena',
               icon: Github,
-              label: 'github.com/dexterbalbuena',
+              label: 'github.com/devbalbuena', 
               external: true,
             },
             {
@@ -205,5 +274,54 @@ export default function RightSidebar() {
         </motion.div>
       </SidebarBlock>
     </motion.aside>
+
+    <AnimatePresence>
+      {certPreview && (
+        <motion.div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          onClick={() => setCertPreview(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${certPreview.title} certificate preview`}
+        >
+          <motion.div
+            className="absolute inset-0 bg-black/70 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+
+          <motion.div
+            className="relative z-10 flex flex-col items-center max-w-[95vw] max-h-[90vh]"
+            initial={{ opacity: 0, scale: 0.92, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: 16 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setCertPreview(null)}
+              className="absolute -top-12 right-0 sm:top-0 sm:-right-12 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium border border-white/20 transition-colors duration-300"
+              aria-label="Close certificate preview"
+            >
+              <X size={18} />
+              Close
+            </button>
+
+            <img
+              src={certPreview.src}
+              alt={certPreview.title}
+              className="max-w-full max-h-[85vh] w-auto rounded-xl shadow-2xl border border-white/10 object-contain"
+            />
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </>
   );
 }

@@ -73,7 +73,7 @@ export default function Header() {
             Send Email
           </a>
           <a
-            href="https://github.com/dexterbalbuena"
+            href="https://github.com/devbalbuena"
             target="_blank"
             rel="noopener noreferrer"
             className={secondaryBtn}
