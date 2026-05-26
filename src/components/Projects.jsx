@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FolderCode, Globe, LayoutGrid, X } from 'lucide-react';
+import {
+  FolderCode,
+  Globe,
+  LayoutGrid,
+  X,
+  GitBranch as Github,
+  Images,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 import { fadeInUp, staggerContainer } from '../motion/variants';
 import {
   cardInteractive,
@@ -17,41 +26,46 @@ import {
 const projectPlaceholder =
   'bg-violet-100 dark:bg-slate-800 dark:border-b dark:border-white/5';
 
+const linkClass = `inline-flex items-center gap-1.5 text-xs font-medium ${mutedText} ${linkAccent}`;
+const linkIconClass =
+  'transition-colors duration-300 group-hover:text-purple-700 dark:group-hover:text-purple-300';
+
 const featuredProjects = [
   {
     id: 1,
     title: 'MindTrack',
+    slug: 'mindtrack',
     description:
       'Mental wellness tracking system with daily mood logging and journaling',
     tech: ['React', 'Node.js', 'MySQL', 'Tailwind CSS'],
-    link: 'mindtrack.vercel.app',
-    image: '/screenshots/mindtrack.png',
+    liveDemo: 'mindtrack.vercel.app',
   },
   {
     id: 2,
     title: 'RareFinds',
+    slug: 'rarefinds',
     description:
       'E-commerce platform for rare collectibles with full inventory management',
     tech: ['Laravel', 'React', 'MySQL', 'Tailwind CSS'],
-    link: 'rarefinds.vercel.app',
-    image: '/screenshots/rarefinds.png',
+    liveDemo: 'rarefinds.vercel.app',
   },
   {
     id: 3,
     title: 'BookNook',
+    slug: 'booknook',
     description:
       'E-library system with digital book management and deployment',
     tech: ['Laravel', 'Blade', 'MySQL'],
-    link: 'github.com/devbalbuena/BookNook',
-    image: '/screenshots/booknook.png',
+    liveDemo: 'https://elibrary-deployment.up.railway.app/',
+    sourceCode: 'github.com/devbalbuena/BookNook',
   },
   {
     id: 4,
     title: 'AskDocPh',
+    slug: 'askdocph',
     description: 'Online doctor consultation and appointment booking platform',
     tech: ['Laravel', 'Blade', 'MySQL'],
-    link: 'github.com/devbalbuena/AskDocPh',
-    image: '/screenshots/askdocph.png',
+    sourceCode: 'github.com/devbalbuena/AskDocPh',
   },
 ];
 
@@ -59,74 +73,96 @@ const modalOnlyProjects = [
   {
     id: 5,
     title: 'School-Library-Management-System',
+    slug: 'school-library-management-system',
     description:
       'Full-featured school library management system with borrowing and returns',
     tech: ['Next.js', 'TypeScript', 'Supabase'],
-    link: 'github.com/devbalbuena/School-Library-Management-System',
-    image: '/screenshots/school-library-management-system.png',
+    sourceCode: 'github.com/devbalbuena/School-Library-Management-System',
   },
   {
     id: 6,
     title: 'AccountPulse',
+    slug: 'accountpulse',
     description: 'Financial account tracking and pulse monitoring dashboard',
     tech: ['JavaScript', 'Tailwind CSS'],
-    link: 'github.com/devbalbuena/AccountPulse',
-    image: '/screenshots/accountpulse.png',
+    sourceCode: 'github.com/devbalbuena/AccountPulse',
   },
   {
     id: 7,
     title: 'TaskTracker',
+    slug: 'tasktracker',
     description: 'Developer todo and task management application',
     tech: ['JavaScript', 'Tailwind CSS'],
-    link: 'github.com/devbalbuena/TaskTracker',
-    image: '/screenshots/tasktracker.png',
+    sourceCode: 'github.com/devbalbuena/TaskTracker',
   },
   {
     id: 8,
     title: 'PublicLaw-Appointment-System',
+    slug: 'publiclaw-appointment-system',
     description: 'Public law office appointment and scheduling system',
     tech: ['HTML', 'CSS', 'JavaScript'],
-    link: 'github.com/devbalbuena/PublicLaw-Appointment-System',
-    image: '/screenshots/publiclaw-appointment-system.png',
+    sourceCode: 'github.com/devbalbuena/PublicLaw-Appointment-System',
   },
   {
     id: 9,
     title: 'WatchFlix-Apk',
+    slug: 'watchflix-apk',
     description: 'Movie streaming mobile APK application',
     tech: ['TypeScript'],
-    link: 'github.com/devbalbuena/WatchFlix-Apk',
-    image: '/screenshots/watchflix-apk.png',
+    sourceCode: 'github.com/devbalbuena/WatchFlix-Apk',
   },
 ];
 
 const allProjects = [...featuredProjects, ...modalOnlyProjects];
 
-function projectHref(link) {
-  return link.startsWith('http') ? link : `https://${link}`;
+function projectHref(url) {
+  return url.startsWith('http') ? url : `https://${url}`;
 }
 
-function ProjectCard({ project, variants = fadeInUp }) {
+function previewPath(slug) {
+  return `/projects/${slug}/preview.png`;
+}
+
+function screenshotPaths(slug, count = 3) {
+  return Array.from({ length: count }, (_, i) => `/projects/${slug}/screenshot-${i + 1}.png`);
+}
+
+function CardLink({ href, icon: Icon, label }) {
   return (
-    <motion.a
-      href={projectHref(project.link)}
+    <a
+      href={projectHref(href)}
       target="_blank"
       rel="noopener noreferrer"
+      className={linkClass}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <Icon size={14} className={linkIconClass} />
+      {label}
+    </a>
+  );
+}
+
+function ProjectCard({ project, onViewPhotos, variants = fadeInUp }) {
+  const previewSrc = previewPath(project.slug);
+
+  return (
+    <motion.article
       variants={variants}
       className={`group flex flex-col overflow-hidden ${cardInteractive}`}
     >
       <div
-        className={`w-full h-40 ${projectPlaceholder} flex items-center justify-center overflow-hidden`}
+        className={`relative w-full h-40 ${projectPlaceholder} flex items-center justify-center overflow-hidden`}
       >
         <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 dark:opacity-90"
+          src={previewSrc}
+          alt={`${project.title} preview`}
+          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 dark:opacity-90"
           onError={(e) => {
             e.target.style.display = 'none';
             if (e.target.nextSibling) e.target.nextSibling.style.display = 'flex';
           }}
         />
-        <div className="hidden flex-col items-center justify-center gap-2 text-gray-500 dark:text-slate-500">
+        <div className="hidden relative z-[1] flex-col items-center justify-center gap-2 text-gray-500 dark:text-slate-500">
           <LayoutGrid
             size={28}
             strokeWidth={1.25}
@@ -149,28 +185,156 @@ function ProjectCard({ project, variants = fadeInUp }) {
           ))}
         </div>
 
-        <span
-          className={`inline-flex items-center gap-1.5 text-xs font-medium ${mutedText} ${linkAccent} mt-auto`}
-        >
-          <Globe
-            size={14}
-            className="transition-colors duration-300 group-hover:text-purple-700 dark:group-hover:text-purple-300"
-          />
-          {project.link.replace(/^https?:\/\//, '')}
-        </span>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-auto">
+          {project.liveDemo && (
+            <CardLink href={project.liveDemo} icon={Globe} label="Live Demo" />
+          )}
+          {project.sourceCode && (
+            <CardLink href={project.sourceCode} icon={Github} label="Source Code" />
+          )}
+          <button
+            type="button"
+            onClick={() => onViewPhotos(project)}
+            className={linkClass}
+          >
+            <Images size={14} className={linkIconClass} />
+            View Photos
+          </button>
+        </div>
       </div>
-    </motion.a>
+    </motion.article>
+  );
+}
+
+function PhotoGalleryModal({ project, onClose }) {
+  const screenshots = screenshotPaths(project.slug, project.screenshotCount ?? 3);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const goPrev = () => {
+    setActiveIndex((i) => (i === 0 ? screenshots.length - 1 : i - 1));
+  };
+
+  const goNext = () => {
+    setActiveIndex((i) => (i === screenshots.length - 1 ? 0 : i + 1));
+  };
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${project.title} photo gallery`}
+    >
+      <motion.div
+        className="absolute inset-0 bg-black/70 backdrop-blur-md"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      />
+
+      <motion.div
+        className="relative z-10 w-full max-w-3xl rounded-2xl border border-white/10 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden"
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between gap-4 border-b border-gray-100 dark:border-white/10 px-5 py-4">
+          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 truncate">
+            {project.title}
+          </h3>
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex items-center justify-center rounded-lg p-2 text-gray-500 transition-colors duration-300 hover:bg-gray-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 shrink-0"
+            aria-label="Close photo gallery"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="p-5 sm:p-6">
+          <div className="relative mb-4">
+            <div
+              className={`w-full aspect-video rounded-xl overflow-hidden ${projectPlaceholder} flex items-center justify-center`}
+            >
+              <img
+                key={screenshots[activeIndex]}
+                src={screenshots[activeIndex]}
+                alt={`${project.title} screenshot ${activeIndex + 1}`}
+                className="w-full h-full object-contain"
+              />
+            </div>
+
+            {screenshots.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full p-2 bg-black/50 text-white hover:bg-black/70 transition-colors duration-300"
+                  aria-label="Previous photo"
+                >
+                  <ChevronLeft size={22} />
+                </button>
+                <button
+                  type="button"
+                  onClick={goNext}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full p-2 bg-black/50 text-white hover:bg-black/70 transition-colors duration-300"
+                  aria-label="Next photo"
+                >
+                  <ChevronRight size={22} />
+                </button>
+              </>
+            )}
+          </div>
+
+          <div className="flex gap-2 justify-center flex-wrap">
+            {screenshots.map((src, index) => (
+              <button
+                key={src}
+                type="button"
+                onClick={() => setActiveIndex(index)}
+                className={`rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                  index === activeIndex
+                    ? 'border-purple-600 dark:border-purple-400 ring-2 ring-purple-200 dark:ring-purple-500/30'
+                    : 'border-transparent opacity-70 hover:opacity-100'
+                }`}
+                aria-label={`View screenshot ${index + 1}`}
+                aria-current={index === activeIndex ? 'true' : undefined}
+              >
+                <img
+                  src={src}
+                  alt=""
+                  className="w-20 h-14 object-cover"
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
 export default function Projects() {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [projectsModalOpen, setProjectsModalOpen] = useState(false);
+  const [galleryProject, setGalleryProject] = useState(null);
+
+  const overlayOpen = projectsModalOpen || galleryProject;
 
   useEffect(() => {
-    if (!modalOpen) return;
+    if (!overlayOpen) return;
 
     const onKeyDown = (e) => {
-      if (e.key === 'Escape') setModalOpen(false);
+      if (e.key !== 'Escape') return;
+      if (galleryProject) setGalleryProject(null);
+      else setProjectsModalOpen(false);
     };
 
     document.body.style.overflow = 'hidden';
@@ -180,7 +344,11 @@ export default function Projects() {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, [modalOpen]);
+  }, [overlayOpen, galleryProject]);
+
+  const handleViewPhotos = (project) => {
+    setGalleryProject(project);
+  };
 
   return (
     <motion.section className="mb-14" variants={fadeInUp}>
@@ -197,18 +365,26 @@ export default function Projects() {
         viewport={{ once: true, margin: '-40px' }}
       >
         {featuredProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+          <ProjectCard
+            key={project.id}
+            project={project}
+            onViewPhotos={handleViewPhotos}
+          />
         ))}
       </motion.div>
 
       <motion.div className="flex justify-center mt-8" variants={fadeInUp}>
-        <button type="button" onClick={() => setModalOpen(true)} className={secondaryBtn}>
+        <button
+          type="button"
+          onClick={() => setProjectsModalOpen(true)}
+          className={secondaryBtn}
+        >
           View All Projects
         </button>
       </motion.div>
 
       <AnimatePresence>
-        {modalOpen && (
+        {projectsModalOpen && (
           <motion.div
             className="fixed inset-0 z-[100] overflow-y-auto"
             initial={{ opacity: 0 }}
@@ -224,12 +400,12 @@ export default function Projects() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setModalOpen(false)}
+              onClick={() => setProjectsModalOpen(false)}
             />
 
             <div
               className="relative z-10 flex min-h-full items-start justify-center p-4 sm:p-8 py-10"
-              onClick={() => setModalOpen(false)}
+              onClick={() => setProjectsModalOpen(false)}
             >
               <motion.div
                 className="w-full max-w-6xl rounded-2xl border border-white/10 bg-white dark:bg-slate-900 shadow-2xl"
@@ -245,7 +421,7 @@ export default function Projects() {
                   </h3>
                   <button
                     type="button"
-                    onClick={() => setModalOpen(false)}
+                    onClick={() => setProjectsModalOpen(false)}
                     className="inline-flex items-center justify-center rounded-lg p-2 text-gray-500 transition-colors duration-300 hover:bg-gray-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
                     aria-label="Close projects modal"
                   >
@@ -261,13 +437,26 @@ export default function Projects() {
                     animate="visible"
                   >
                     {allProjects.map((project) => (
-                      <ProjectCard key={project.id} project={project} />
+                      <ProjectCard
+                        key={project.id}
+                        project={project}
+                        onViewPhotos={handleViewPhotos}
+                      />
                     ))}
                   </motion.div>
                 </div>
               </motion.div>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {galleryProject && (
+          <PhotoGalleryModal
+            project={galleryProject}
+            onClose={() => setGalleryProject(null)}
+          />
         )}
       </AnimatePresence>
     </motion.section>
