@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import Header from './components/Header';
 import Projects from './components/Projects';
 import About from './components/About';
-import OJT from './components/OJT';
+import CurrentProjects from './components/CurrentProjects';
 import Gallery from './components/Gallery';
 import RightSidebar from './components/RightSidebar';
 import DarkModeToggle from './components/DarkModeToggle';
@@ -40,7 +40,7 @@ export default function App() {
             <Header />
             <Projects />
             <About />
-            <OJT />
+            <CurrentProjects />
             <Gallery />
           </motion.div>
 

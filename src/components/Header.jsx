@@ -56,11 +56,22 @@ export default function Header() {
         </motion.h2>
 
         <motion.div
-          className="flex items-center gap-1.5 text-slate-500 dark:text-slate-300 text-sm mb-8"
+          className="flex items-center gap-1.5 text-slate-500 dark:text-slate-300 text-sm mb-4"
           variants={fadeInUp}
         >
           <MapPin size={16} className="text-purple-700 dark:text-purple-300" />
           <span>Butuan City, Philippines</span>
+        </motion.div>
+
+        <motion.div className="mb-6" variants={fadeInUp}>
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-300">
+            <span
+              className="h-2 w-2 shrink-0 rounded-full bg-emerald-500 animate-pulse"
+              aria-hidden="true"
+            />
+            Open to freelance · Full-Stack · UI/UX · AI Projects
+          </span>
+            
         </motion.div>
 
         <motion.div className="flex flex-wrap items-center gap-3" variants={fadeInUp}>
