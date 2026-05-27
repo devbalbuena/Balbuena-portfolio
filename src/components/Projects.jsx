@@ -33,12 +33,12 @@ const linkIconClass =
 const featuredProjects = [
   {
     id: 1,
-    title: 'MindTrack',
-    slug: 'mindtrack',
+    title: 'CertiDraft',
+    slug: 'certidraft',
     description:
-      'Mental wellness tracking system with daily mood logging and journaling',
-    tech: ['React', 'Node.js', 'MySQL', 'Tailwind CSS'],
-    liveDemo: 'mindtrack.vercel.app',
+      'AI-powered certificate generation platform that automatically creates, customizes, and manages certificates using smart templates and automation',
+    tech: ['React', 'Laravel', 'OpenAI API', 'Tailwind CSS'],
+    sourceCode: 'github.com/devbalbuena/CertiDraft',
   },
   {
     id: 2,
@@ -72,6 +72,15 @@ const featuredProjects = [
 const modalOnlyProjects = [
   {
     id: 5,
+    title: 'MindTrack',
+    slug: 'mindtrack',
+    description:
+      'Mental wellness tracking system with daily mood logging and journaling',
+    tech: ['React', 'Node.js', 'MySQL', 'Tailwind CSS'],
+    liveDemo: 'mindtrack.vercel.app',
+  },
+  {
+    id: 6,
     title: 'School-Library-Management-System',
     slug: 'school-library-management-system',
     description:
@@ -80,7 +89,7 @@ const modalOnlyProjects = [
     sourceCode: 'github.com/devbalbuena/School-Library-Management-System',
   },
   {
-    id: 6,
+    id: 7,
     title: 'AccountPulse',
     slug: 'accountpulse',
     description: 'Financial account tracking and pulse monitoring dashboard',
@@ -88,7 +97,7 @@ const modalOnlyProjects = [
     sourceCode: 'github.com/devbalbuena/AccountPulse',
   },
   {
-    id: 7,
+    id: 8,
     title: 'TaskTracker',
     slug: 'tasktracker',
     description: 'Developer todo and task management application',
@@ -96,7 +105,7 @@ const modalOnlyProjects = [
     sourceCode: 'github.com/devbalbuena/TaskTracker',
   },
   {
-    id: 8,
+    id: 9,
     title: 'PublicLaw-Appointment-System',
     slug: 'publiclaw-appointment-system',
     description: 'Public law office appointment and scheduling system',
@@ -104,7 +113,7 @@ const modalOnlyProjects = [
     sourceCode: 'github.com/devbalbuena/PublicLaw-Appointment-System',
   },
   {
-    id: 9,
+    id: 10,
     title: 'WatchFlix-Apk',
     slug: 'watchflix-apk',
     description: 'Movie streaming mobile APK application',
