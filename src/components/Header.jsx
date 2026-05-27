@@ -28,71 +28,80 @@ export default function Header() {
   return (
     <>
       <motion.header className="mb-12 relative" variants={fadeInUp}>
-        <button
-          type="button"
-          onClick={() => setIsModalOpen(true)}
-          aria-label="View profile picture"
-          className="block mb-6 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
-        >
-          <img
-            src={PROFILE_SRC}
-            alt="Dexter Balbuena"
-            className="w-24 h-24 object-cover rounded-2xl shadow-sm dark:shadow-none border border-slate-100 dark:border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:hover:shadow-none cursor-pointer"
-          />
-        </button>
-
-        <motion.div className="flex items-center gap-2 mb-1" variants={fadeInUp}>
-          <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
-            Dexter Balbuena
-          </h1>
-          <BadgeCheck className="text-purple-700 dark:text-purple-300" size={24} />
-        </motion.div>
-
-        <motion.h2
-          className="text-lg text-slate-500 dark:text-slate-300 font-medium mb-3"
-          variants={fadeInUp}
-        >
-          Full-Stack Developer · IT Student
-        </motion.h2>
-
-        <motion.div
-          className="flex items-center gap-1.5 text-slate-500 dark:text-slate-300 text-sm mb-4"
-          variants={fadeInUp}
-        >
-          <MapPin size={16} className="text-purple-700 dark:text-purple-300" />
-          <span>Butuan City, Philippines</span>
-        </motion.div>
-
-        <motion.div className="mb-6" variants={fadeInUp}>
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-300">
-            <span
-              className="h-2 w-2 shrink-0 rounded-full bg-emerald-500 animate-pulse"
-              aria-hidden="true"
-            />
-            Open to freelance · Full-Stack · UI/UX · AI Projects
-          </span>
-            
-        </motion.div>
-
-        <motion.div className="flex flex-wrap items-center gap-3" variants={fadeInUp}>
-          <a href="/cv.pdf" download className={primaryBtn}>
-            <Download size={16} />
-            Download Resume
-          </a>
-          <a href="mailto:dexterbalbuena@email.com" className={secondaryBtn}>
-            <Mail size={16} />
-            Send Email
-          </a>
-          <a
-            href="https://github.com/devbalbuena"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={secondaryBtn}
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+          <button
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+            aria-label="View profile picture"
+            className="shrink-0 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
           >
-            <Github size={16} />
-            GitHub
-          </a>
-        </motion.div>
+            <img
+              src={PROFILE_SRC}
+              alt="Dexter Balbuena"
+              className="w-32 h-32 object-cover rounded-full shadow-sm dark:shadow-none border border-slate-100 dark:border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:hover:shadow-none cursor-pointer"
+            />
+          </button>
+
+          <div className="flex-1 text-center md:text-left">
+            <motion.div
+              className="flex items-center justify-center md:justify-start gap-2 mb-1"
+              variants={fadeInUp}
+            >
+              <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
+                Dexter Balbuena
+              </h1>
+              <BadgeCheck className="text-purple-700 dark:text-purple-300" size={24} />
+            </motion.div>
+
+            <motion.h2
+              className="text-lg text-slate-500 dark:text-slate-300 font-medium mb-3"
+              variants={fadeInUp}
+            >
+              Full-Stack Developer · IT Student
+            </motion.h2>
+
+            <motion.div
+              className="flex items-center justify-center md:justify-start gap-1.5 text-slate-500 dark:text-slate-300 text-sm mb-4"
+              variants={fadeInUp}
+            >
+              <MapPin size={16} className="text-purple-700 dark:text-purple-300" />
+              <span>Butuan City, Philippines</span>
+            </motion.div>
+
+            <motion.div className="mb-6" variants={fadeInUp}>
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-300">
+                <span
+                  className="h-2 w-2 shrink-0 rounded-full bg-emerald-500 animate-pulse"
+                  aria-hidden="true"
+                />
+                Open to freelance · Full-Stack · UI/UX · AI Projects
+              </span>
+            </motion.div>
+
+            <motion.div
+              className="flex flex-wrap items-center justify-center md:justify-start gap-3"
+              variants={fadeInUp}
+            >
+              <a href="/cv.pdf" download className={primaryBtn}>
+                <Download size={16} />
+                Download Resume
+              </a>
+              <a href="mailto:dexterbalbuena@email.com" className={secondaryBtn}>
+                <Mail size={16} />
+                Send Email
+              </a>
+              <a
+                href="https://github.com/devbalbuena"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={secondaryBtn}
+              >
+                <Github size={16} />
+                GitHub
+              </a>
+            </motion.div>
+          </div>
+        </div>
       </motion.header>
 
       <AnimatePresence>

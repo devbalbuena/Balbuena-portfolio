@@ -120,11 +120,11 @@ function projectHref(url) {
 }
 
 function previewPath(slug) {
-  return `/projects/${slug}/preview.png`;
+  return `/projects/${slug}/preview.jpg`;
 }
 
-function screenshotPaths(slug, count = 3) {
-  return Array.from({ length: count }, (_, i) => `/projects/${slug}/screenshot-${i + 1}.png`);
+function photoPaths(slug, count = 3) {
+  return Array.from({ length: count }, (_, i) => `/projects/${slug}/photo-${i + 1}.jpg`);
 }
 
 function CardLink({ href, icon: Icon, label }) {
@@ -207,15 +207,26 @@ function ProjectCard({ project, onViewPhotos, variants = fadeInUp }) {
 }
 
 function PhotoGalleryModal({ project, onClose }) {
-  const screenshots = screenshotPaths(project.slug, project.screenshotCount ?? 3);
+  const [photos, setPhotos] = useState(() =>
+    photoPaths(project.slug, project.photoCount ?? 3),
+  );
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const removePhotoAt = (indexToRemove) => {
+    setPhotos((prev) => prev.filter((_, i) => i !== indexToRemove));
+    setActiveIndex((prevIndex) => {
+      if (indexToRemove < prevIndex) return prevIndex - 1;
+      if (indexToRemove === prevIndex) return Math.max(0, prevIndex - 1);
+      return prevIndex;
+    });
+  };
+
   const goPrev = () => {
-    setActiveIndex((i) => (i === 0 ? screenshots.length - 1 : i - 1));
+    setActiveIndex((i) => (i === 0 ? photos.length - 1 : i - 1));
   };
 
   const goNext = () => {
-    setActiveIndex((i) => (i === screenshots.length - 1 ? 0 : i + 1));
+    setActiveIndex((i) => (i === photos.length - 1 ? 0 : i + 1));
   };
 
   return (
@@ -264,15 +275,28 @@ function PhotoGalleryModal({ project, onClose }) {
             <div
               className={`w-full aspect-video rounded-xl overflow-hidden ${projectPlaceholder} flex items-center justify-center`}
             >
-              <img
-                key={screenshots[activeIndex]}
-                src={screenshots[activeIndex]}
-                alt={`${project.title} screenshot ${activeIndex + 1}`}
-                className="w-full h-full object-contain"
-              />
+              {photos.length > 0 ? (
+                <img
+                  key={photos[activeIndex]}
+                  src={photos[activeIndex]}
+                  alt={`${project.title} photo ${activeIndex + 1}`}
+                  className="w-full h-full object-contain"
+                  onError={() => removePhotoAt(activeIndex)}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center gap-2 text-gray-500 dark:text-slate-500">
+                  <LayoutGrid
+                    size={28}
+                    strokeWidth={1.25}
+                    className="opacity-60 dark:opacity-40"
+                    aria-hidden
+                  />
+                  <span className="text-xs font-medium">No photos found</span>
+                </div>
+              )}
             </div>
 
-            {screenshots.length > 1 && (
+            {photos.length > 1 && (
               <>
                 <button
                   type="button"
@@ -295,7 +319,7 @@ function PhotoGalleryModal({ project, onClose }) {
           </div>
 
           <div className="flex gap-2 justify-center flex-wrap">
-            {screenshots.map((src, index) => (
+            {photos.map((src, index) => (
               <button
                 key={src}
                 type="button"
@@ -305,13 +329,14 @@ function PhotoGalleryModal({ project, onClose }) {
                     ? 'border-purple-600 dark:border-purple-400 ring-2 ring-purple-200 dark:ring-purple-500/30'
                     : 'border-transparent opacity-70 hover:opacity-100'
                 }`}
-                aria-label={`View screenshot ${index + 1}`}
+                aria-label={`View photo ${index + 1}`}
                 aria-current={index === activeIndex ? 'true' : undefined}
               >
                 <img
                   src={src}
                   alt=""
                   className="w-20 h-14 object-cover"
+                  onError={() => removePhotoAt(index)}
                 />
               </button>
             ))}
