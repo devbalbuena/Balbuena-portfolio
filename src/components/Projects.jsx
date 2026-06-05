@@ -42,12 +42,12 @@ const featuredProjects = [
   },
   {
     id: 2,
-    title: 'RareFinds',
-    slug: 'rarefinds',
-    description:
-      'E-commerce platform for rare collectibles with full inventory management',
-    tech: ['Laravel', 'React', 'MySQL', 'Tailwind CSS'],
-    liveDemo: 'rarefinds.vercel.app',
+    title: 'AccountPulse',
+    slug: 'accountpulse',
+    description: 'Financial account tracking and pulse monitoring dashboard',
+    tech: ['JavaScript', 'Tailwind CSS'],
+    liveDemo: 'https://account-pulse-v1.vercel.app',
+    sourceCode: 'github.com/devbalbuena/AccountPulse',
   },
   {
     id: 3,
@@ -90,11 +90,12 @@ const modalOnlyProjects = [
   },
   {
     id: 7,
-    title: 'AccountPulse',
-    slug: 'accountpulse',
-    description: 'Financial account tracking and pulse monitoring dashboard',
-    tech: ['JavaScript', 'Tailwind CSS'],
-    sourceCode: 'github.com/devbalbuena/AccountPulse',
+    title: 'RareFinds',
+    slug: 'rarefinds',
+    description:
+      'E-commerce platform for rare collectibles with full inventory management',
+    tech: ['Laravel', 'React', 'MySQL', 'Tailwind CSS'],
+    liveDemo: 'rarefinds.vercel.app',
   },
   {
     id: 8,
