@@ -49,6 +49,16 @@ const skillThemes = {
     'bg-violet-50 text-violet-700 border-violet-100 dark:bg-violet-500/15 dark:text-violet-300 dark:border-white/10',
   'Claude API':
     'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-100 dark:bg-fuchsia-500/15 dark:text-fuchsia-300 dark:border-white/10',
+  Vercel:
+    'bg-slate-50 text-slate-800 border-slate-200 dark:bg-slate-500/15 dark:text-slate-200 dark:border-white/10',
+  Railway:
+    'bg-indigo-50 text-indigo-700 border-indigo-100 dark:bg-indigo-500/15 dark:text-indigo-300 dark:border-white/10',
+  Render:
+    'bg-sky-50 text-sky-800 border-sky-100 dark:bg-sky-500/15 dark:text-sky-300 dark:border-white/10',
+  Netlify:
+    'bg-emerald-50 text-emerald-800 border-emerald-100 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-white/10',
+  Docker:
+    'bg-blue-50 text-blue-800 border-blue-100 dark:bg-blue-500/15 dark:text-blue-300 dark:border-white/10',
 };
 
 const certifications = [
@@ -119,6 +129,10 @@ const skillGroups = [
   {
     label: 'Database & Tools',
     skills: ['MySQL', 'Git', 'Figma'],
+  },
+  {
+    label: 'Deployment',
+    skills: ['Vercel', 'Railway', 'Render', 'Netlify', 'Docker'],
   },
 ];
 
