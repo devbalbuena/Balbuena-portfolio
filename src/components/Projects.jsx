@@ -44,7 +44,7 @@ const featuredProjects = [
     id: 2,
     title: 'AccountPulse',
     slug: 'accountpulse',
-    description: 'Financial account tracking and pulse monitoring dashboard',
+    description: 'A real-time token and subscription management dashboard. Track API token expiration across multiple accounts and AI models, monitor billing cycles with smart renewal alerts, and visualize spending through an analytics dashboard — all in one place. and pulse monitoring dashboard',
     tech: ['JavaScript', 'Tailwind CSS'],
     liveDemo: 'https://account-pulse-v1.vercel.app',
     sourceCode: 'github.com/devbalbuena/AccountPulse',
