@@ -125,6 +125,8 @@ const modalOnlyProjects = [
 
 const allProjects = [...featuredProjects, ...modalOnlyProjects];
 
+const MAX_GALLERY_PHOTOS = 20;
+
 function projectHref(url) {
   return url.startsWith('http') ? url : `https://${url}`;
 }
@@ -133,7 +135,7 @@ function previewPath(slug) {
   return `/projects/${slug}/preview.jpg`;
 }
 
-function photoPaths(slug, count = 3) {
+function photoPaths(slug, count = MAX_GALLERY_PHOTOS) {
   return Array.from({ length: count }, (_, i) => `/projects/${slug}/photo-${i + 1}.jpg`);
 }
 
@@ -218,7 +220,7 @@ function ProjectCard({ project, onViewPhotos, variants = fadeInUp }) {
 
 function PhotoGalleryModal({ project, onClose }) {
   const [photos, setPhotos] = useState(() =>
-    photoPaths(project.slug, project.photoCount ?? 3),
+    photoPaths(project.slug, project.photoCount ?? MAX_GALLERY_PHOTOS),
   );
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -241,7 +243,7 @@ function PhotoGalleryModal({ project, onClose }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-8"
+      className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -259,16 +261,21 @@ function PhotoGalleryModal({ project, onClose }) {
       />
 
       <motion.div
-        className="relative z-10 w-full max-w-3xl rounded-2xl border border-white/10 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden"
+        className="relative z-10 w-full max-w-[min(96vw,1200px)] max-h-[96vh] flex flex-col rounded-2xl border border-white/10 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden"
         initial={{ opacity: 0, scale: 0.96, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 16 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between gap-4 border-b border-gray-100 dark:border-white/10 px-5 py-4">
+        <div className="flex items-center justify-between gap-4 border-b border-gray-100 dark:border-white/10 px-4 py-3 sm:px-5 sm:py-4 shrink-0">
           <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 truncate">
             {project.title}
+            {photos.length > 0 && (
+              <span className="ml-2 text-sm font-normal text-gray-500 dark:text-slate-400">
+                ({activeIndex + 1} / {photos.length})
+              </span>
+            )}
           </h3>
           <button
             type="button"
@@ -280,10 +287,10 @@ function PhotoGalleryModal({ project, onClose }) {
           </button>
         </div>
 
-        <div className="p-5 sm:p-6">
-          <div className="relative mb-4">
+        <div className="flex flex-col min-h-0 p-3 sm:p-4 overflow-hidden">
+          <div className="relative mb-3 shrink-0">
             <div
-              className={`w-full aspect-video rounded-xl overflow-hidden ${projectPlaceholder} flex items-center justify-center`}
+              className={`w-full h-[min(70vh,720px)] rounded-xl overflow-hidden ${projectPlaceholder} flex items-center justify-center`}
             >
               {photos.length > 0 ? (
                 <img
@@ -328,29 +335,31 @@ function PhotoGalleryModal({ project, onClose }) {
             )}
           </div>
 
-          <div className="flex gap-2 justify-center flex-wrap">
-            {photos.map((src, index) => (
-              <button
-                key={src}
-                type="button"
-                onClick={() => setActiveIndex(index)}
-                className={`rounded-lg overflow-hidden border-2 transition-all duration-300 ${
-                  index === activeIndex
-                    ? 'border-purple-600 dark:border-purple-400 ring-2 ring-purple-200 dark:ring-purple-500/30'
-                    : 'border-transparent opacity-70 hover:opacity-100'
-                }`}
-                aria-label={`View photo ${index + 1}`}
-                aria-current={index === activeIndex ? 'true' : undefined}
-              >
-                <img
-                  src={src}
-                  alt=""
-                  className="w-20 h-14 object-cover"
-                  onError={() => removePhotoAt(index)}
-                />
-              </button>
-            ))}
-          </div>
+          {photos.length > 0 && (
+            <div className="flex gap-2 overflow-x-auto pb-1 shrink-0">
+              {photos.map((src, index) => (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  className={`shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                    index === activeIndex
+                      ? 'border-purple-600 dark:border-purple-400 ring-2 ring-purple-200 dark:ring-purple-500/30'
+                      : 'border-transparent opacity-70 hover:opacity-100'
+                  }`}
+                  aria-label={`View photo ${index + 1}`}
+                  aria-current={index === activeIndex ? 'true' : undefined}
+                >
+                  <img
+                    src={src}
+                    alt=""
+                    className="w-24 h-16 object-cover"
+                    onError={() => removePhotoAt(index)}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </motion.div>
     </motion.div>
