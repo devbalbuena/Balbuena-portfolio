@@ -20,6 +20,7 @@ import {
   accentIcon,
   linkAccent,
 } from '../lib/ui';
+import GitHubActivity from './GitHubActivity';
 
 const skillThemes = {
   HTML: 'bg-orange-50 text-orange-700 border-orange-100 dark:bg-orange-500/15 dark:text-orange-300 dark:border-white/10',
@@ -289,6 +290,8 @@ export default function RightSidebar() {
           ))}
         </motion.div>
       </SidebarBlock>
+
+      <GitHubActivity />
 
       <SidebarBlock icon={Contact} title="Contact">
         <motion.div className={`${cardBase} p-5 space-y-4`} variants={fadeInUp}>
