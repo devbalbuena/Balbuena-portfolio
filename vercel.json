@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/github-contributions/:user",
+      "destination": "https://github-contributions.vercel.app/api/v1/:user"
+    }
+  ]
+}
