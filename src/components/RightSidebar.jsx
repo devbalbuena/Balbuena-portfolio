@@ -21,6 +21,8 @@ import {
   linkAccent,
 } from '../lib/ui';
 import GitHubActivity from './GitHubActivity';
+import ContactForm from './ContactForm';
+import { useToast } from '../context/ToastContext';
 
 const skillThemes = {
   HTML: 'bg-orange-50 text-orange-700 border-orange-100 dark:bg-orange-500/15 dark:text-orange-300 dark:border-white/10',
@@ -124,8 +126,20 @@ function SidebarBlock({ icon: Icon, title, children }) {
   );
 }
 
+const CONTACT_EMAIL = 'balbuenadexter2@gmail.com';
+
 export default function RightSidebar() {
   const [imagePreview, setImagePreview] = useState(null);
+  const { showToast } = useToast();
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(CONTACT_EMAIL);
+      showToast('Email copied to clipboard!');
+    } catch {
+      showToast('Could not copy email.');
+    }
+  };
 
   useEffect(() => {
     if (!imagePreview) return;
@@ -270,41 +284,52 @@ export default function RightSidebar() {
 
       <SidebarBlock icon={Contact} title="Contact">
         <motion.div className={`${cardBase} p-5 space-y-4`} variants={fadeInUp}>
-          {[
-            { href: 'tel:+639912131795', icon: Phone, label: '+63 991 213 1795' },
-            {
-              href: 'mailto:balbuenadexter2@gmail.com',
-              icon: Mail,
-              label: 'balbuenadexter2@gmail.com',
-            },
-            {
-              href: 'https://github.com/devbalbuena',
-              icon: Github,
-              label: 'github.com/devbalbuena', 
-              external: true,
-            },
-            {
-              href: 'https://linkedin.com/in/dexterbalbuena',
-              icon: Linkedin,
-              label: 'linkedin.com/in/dexterbalbuena',
-              external: true,
-            },
-          ].map(({ href, icon: Icon, label, external }) => (
-            <a
-              key={label}
-              href={href}
-              {...(external
-                ? { target: '_blank', rel: 'noopener noreferrer' }
-                : {})}
-              className={`group flex items-center gap-3 text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent}`}
-            >
-              <Icon
-                size={16}
-                className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
-              />
-              <span>{label}</span>
-            </a>
-          ))}
+          <a
+            href="tel:+639912131795"
+            className={`group flex items-center gap-3 text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent}`}
+          >
+            <Phone
+              size={16}
+              className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
+            />
+            <span>+63 991 213 1795</span>
+          </a>
+          <button
+            type="button"
+            onClick={handleCopyEmail}
+            className={`group flex items-center gap-3 text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent} text-left`}
+          >
+            <Mail
+              size={16}
+              className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
+            />
+            <span>{CONTACT_EMAIL}</span>
+          </button>
+          <a
+            href="https://github.com/devbalbuena"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`group flex items-center gap-3 text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent}`}
+          >
+            <Github
+              size={16}
+              className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
+            />
+            <span>github.com/devbalbuena</span>
+          </a>
+          <a
+            href="https://linkedin.com/in/dexterbalbuena"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`group flex items-center gap-3 text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent}`}
+          >
+            <Linkedin
+              size={16}
+              className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
+            />
+            <span>linkedin.com/in/dexterbalbuena</span>
+          </a>
+          <ContactForm />
         </motion.div>
       </SidebarBlock>
     </motion.aside>

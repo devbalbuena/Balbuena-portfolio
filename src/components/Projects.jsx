@@ -125,7 +125,17 @@ const modalOnlyProjects = [
 
 const allProjects = [...featuredProjects, ...modalOnlyProjects];
 
+const FILTER_TABS = ['All', 'Laravel', 'React', 'AI', 'MySQL'];
+
 const MAX_GALLERY_PHOTOS = 20;
+
+function projectMatchesFilter(project, filter) {
+  if (filter === 'All') return true;
+  if (filter === 'AI') {
+    return project.tech.some((tag) => /ai|openai/i.test(tag));
+  }
+  return project.tech.some((tag) => tag.toLowerCase().includes(filter.toLowerCase()));
+}
 
 function projectHref(url) {
   return url.startsWith('http') ? url : `https://${url}`;
@@ -369,6 +379,7 @@ function PhotoGalleryModal({ project, onClose }) {
 export default function Projects() {
   const [projectsModalOpen, setProjectsModalOpen] = useState(false);
   const [galleryProject, setGalleryProject] = useState(null);
+  const [activeFilter, setActiveFilter] = useState('All');
 
   const overlayOpen = projectsModalOpen || galleryProject;
 
@@ -394,28 +405,66 @@ export default function Projects() {
     setGalleryProject(project);
   };
 
+  const filteredFeatured = featuredProjects.filter((p) =>
+    projectMatchesFilter(p, activeFilter),
+  );
+  const filteredAll = allProjects.filter((p) => projectMatchesFilter(p, activeFilter));
+
   return (
     <motion.section className="mb-14" variants={fadeInUp}>
-      <motion.div className="flex items-center gap-2 mb-6 group" variants={fadeInUp}>
+      <motion.div className="flex items-center gap-2 mb-4 group" variants={fadeInUp}>
         <FolderCode className={sectionIcon} size={20} />
         <h3 className={sectionTitle}>Projects</h3>
       </motion.div>
 
       <motion.div
-        className="grid sm:grid-cols-2 gap-5"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-40px' }}
+        className="flex flex-wrap gap-2 mb-6"
+        variants={fadeInUp}
       >
-        {featuredProjects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            onViewPhotos={handleViewPhotos}
-          />
+        {FILTER_TABS.map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => setActiveFilter(tab)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-300 ${
+              activeFilter === tab
+                ? 'bg-purple-600 text-white border-purple-600 dark:bg-purple-500 dark:border-purple-500'
+                : 'bg-white text-gray-600 border-gray-200 hover:border-purple-300 hover:text-purple-700 dark:bg-slate-900 dark:text-slate-300 dark:border-white/10 dark:hover:border-purple-500/40 dark:hover:text-purple-300'
+            }`}
+          >
+            {tab}
+          </button>
         ))}
       </motion.div>
+
+      <motion.div
+        className="grid sm:grid-cols-2 gap-5"
+        layout
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredFeatured.map((project) => (
+            <motion.div
+              key={project.id}
+              layout
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.25 }}
+            >
+              <ProjectCard
+                project={project}
+                onViewPhotos={handleViewPhotos}
+              />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
+
+      {filteredFeatured.length === 0 && (
+        <p className={`text-sm text-center py-8 ${mutedText}`}>
+          No projects match this filter.
+        </p>
+      )}
 
       <motion.div className="flex justify-center mt-8" variants={fadeInUp}>
         <button
@@ -480,7 +529,7 @@ export default function Projects() {
                     initial="hidden"
                     animate="visible"
                   >
-                    {allProjects.map((project) => (
+                    {filteredAll.map((project) => (
                       <ProjectCard
                         key={project.id}
                         project={project}

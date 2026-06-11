@@ -3,11 +3,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BadgeCheck, MapPin, Download, Mail, GitBranch as Github } from 'lucide-react';
 import { fadeInUp } from '../motion/variants';
 import { primaryBtn, secondaryBtn } from '../lib/ui';
+import { useToast } from '../context/ToastContext';
+import TypewriterSubtitle from './TypewriterSubtitle';
 
 const PROFILE_SRC = '/profile.jpg';
+const EMAIL = 'balbuenadexter2@gmail.com';
 
 export default function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (!isModalOpen) return;
@@ -24,6 +28,19 @@ export default function Header() {
       window.removeEventListener('keydown', onKeyDown);
     };
   }, [isModalOpen]);
+
+  const handleDownloadResume = () => {
+    showToast('Resume downloading...');
+  };
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      showToast('Email copied to clipboard!');
+    } catch {
+      showToast('Could not copy email.');
+    }
+  };
 
   return (
     <>
@@ -53,12 +70,7 @@ export default function Header() {
               <BadgeCheck className="text-purple-700 dark:text-purple-300" size={24} />
             </motion.div>
 
-            <motion.h2
-              className="text-lg text-slate-500 dark:text-slate-300 font-medium mb-3"
-              variants={fadeInUp}
-            >
-              Full-Stack Developer · IT Student
-            </motion.h2>
+            <TypewriterSubtitle />
 
             <motion.div
               className="flex items-center justify-center md:justify-start gap-1.5 text-slate-500 dark:text-slate-300 text-sm mb-4"
@@ -82,14 +94,19 @@ export default function Header() {
               className="flex flex-wrap items-center justify-center md:justify-start gap-3"
               variants={fadeInUp}
             >
-              <a href="/cv.pdf" download className={primaryBtn}>
+              <a
+                href="/cv.pdf"
+                download
+                onClick={handleDownloadResume}
+                className={primaryBtn}
+              >
                 <Download size={16} />
                 Download Resume
               </a>
-              <a href="mailto:dexterbalbuena@email.com" className={secondaryBtn}>
+              <button type="button" onClick={handleCopyEmail} className={secondaryBtn}>
                 <Mail size={16} />
-                Send Email
-              </a>
+                Copy Email
+              </button>
               <a
                 href="https://github.com/devbalbuena"
                 target="_blank"

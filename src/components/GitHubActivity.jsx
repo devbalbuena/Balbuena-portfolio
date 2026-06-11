@@ -85,10 +85,10 @@ function ContributionGrid({ contributions, isDark }) {
   useEffect(() => {
     if (hasAutoScrolled.current || !scrollRef.current || weeks.length === 0) return;
 
-    const juneIndex = monthLabels.findIndex((label) => label === 'Jun');
-    if (juneIndex === -1) return;
+    const mayIndex = monthLabels.findIndex((label) => label === 'May');
+    if (mayIndex === -1) return;
 
-    scrollRef.current.scrollLeft = juneIndex * (cellSize + gap);
+    scrollRef.current.scrollLeft = mayIndex * (cellSize + gap);
     hasAutoScrolled.current = true;
   }, [monthLabels, weeks.length, cellSize, gap]);
 
