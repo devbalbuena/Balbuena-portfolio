@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { useToast } from '../context/ToastContext';
 import { primaryBtn, cardBody } from '../lib/ui';
 
-const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ID
-  ? `https://formspree.io/f/${import.meta.env.VITE_FORMSPREE_ID}`
-  : null;
+const BREVO_API_KEY = import.meta.env.VITE_BREVO_API_KEY;
+const RECIPIENT_EMAIL = 'balbuenadexter2@gmail.com';
 
 const inputClass =
   'w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-gray-400 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-400 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-100 dark:placeholder:text-slate-500';
@@ -19,20 +18,36 @@ export default function ContactForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!FORMSPREE_ENDPOINT) {
+    if (!BREVO_API_KEY) {
       showToast('Contact form is not configured yet.');
       return;
     }
 
     setSubmitting(true);
     try {
-      const response = await fetch(FORMSPREE_ENDPOINT, {
+      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'application/json',
+          'api-key': BREVO_API_KEY,
         },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({
+          sender: {
+            name: 'Portfolio Contact',
+            email: RECIPIENT_EMAIL,
+          },
+          to: [{ email: RECIPIENT_EMAIL, name: 'Dexter Balbuena' }],
+          replyTo: { email, name },
+          subject: `Portfolio message from ${name}`,
+          htmlContent: `
+            <h2>New portfolio contact message</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message.replace(/\n/g, '<br />')}</p>
+          `,
+          textContent: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+        }),
       });
 
       if (!response.ok) throw new Error('Submit failed');

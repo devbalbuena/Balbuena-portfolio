@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FolderCode,
@@ -30,7 +30,7 @@ const linkClass = `inline-flex items-center gap-1.5 text-xs font-medium ${mutedT
 const linkIconClass =
   'transition-colors duration-300 group-hover:text-purple-700 dark:group-hover:text-purple-300';
 
-const featuredProjects = [
+const PINNED_PROJECTS = [
   {
     id: 1,
     title: 'CertiDraft',
@@ -123,11 +123,15 @@ const modalOnlyProjects = [
   },
 ];
 
-const allProjects = [...featuredProjects, ...modalOnlyProjects];
+const allProjects = [...PINNED_PROJECTS, ...modalOnlyProjects];
 
 const FILTER_TABS = ['All', 'Laravel', 'React', 'AI', 'MySQL'];
 
 const MAX_GALLERY_PHOTOS = 20;
+
+function getFilteredPinnedProjects(filter) {
+  return PINNED_PROJECTS.filter((project) => projectMatchesFilter(project, filter));
+}
 
 function projectMatchesFilter(project, filter) {
   if (filter === 'All') return true;
@@ -405,10 +409,10 @@ export default function Projects() {
     setGalleryProject(project);
   };
 
-  const filteredFeatured = featuredProjects.filter((p) =>
-    projectMatchesFilter(p, activeFilter),
+  const displayedPinnedProjects = useMemo(
+    () => getFilteredPinnedProjects(activeFilter),
+    [activeFilter],
   );
-  const filteredAll = allProjects.filter((p) => projectMatchesFilter(p, activeFilter));
 
   return (
     <motion.section className="mb-14" variants={fadeInUp}>
@@ -438,31 +442,24 @@ export default function Projects() {
       </motion.div>
 
       <motion.div
+        key={activeFilter}
         className="grid sm:grid-cols-2 gap-5"
-        layout
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.25 }}
       >
-        <AnimatePresence mode="popLayout">
-          {filteredFeatured.map((project) => (
-            <motion.div
-              key={project.id}
-              layout
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.25 }}
-            >
-              <ProjectCard
-                project={project}
-                onViewPhotos={handleViewPhotos}
-              />
-            </motion.div>
-          ))}
-        </AnimatePresence>
+        {displayedPinnedProjects.map((project) => (
+          <ProjectCard
+            key={project.id}
+            project={project}
+            onViewPhotos={handleViewPhotos}
+          />
+        ))}
       </motion.div>
 
-      {filteredFeatured.length === 0 && (
+      {displayedPinnedProjects.length === 0 && (
         <p className={`text-sm text-center py-8 ${mutedText}`}>
-          No projects match this filter.
+          No pinned projects use this stack.
         </p>
       )}
 
@@ -529,7 +526,7 @@ export default function Projects() {
                     initial="hidden"
                     animate="visible"
                   >
-                    {filteredAll.map((project) => (
+                    {allProjects.map((project) => (
                       <ProjectCard
                         key={project.id}
                         project={project}
