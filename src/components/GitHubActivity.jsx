@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { GitBranch as Github } from 'lucide-react';
 import { fadeInUp } from '../motion/variants';
@@ -74,11 +74,23 @@ function buildMonthLabels(weeks) {
 }
 
 function ContributionGrid({ contributions, isDark }) {
+  const scrollRef = useRef(null);
+  const hasAutoScrolled = useRef(false);
   const weeks = useMemo(() => buildWeeks(contributions), [contributions]);
   const monthLabels = useMemo(() => buildMonthLabels(weeks), [weeks]);
   const colors = isDark ? INTENSITY_COLORS.dark : INTENSITY_COLORS.light;
   const cellSize = 11;
   const gap = 3;
+
+  useEffect(() => {
+    if (hasAutoScrolled.current || !scrollRef.current || weeks.length === 0) return;
+
+    const juneIndex = monthLabels.findIndex((label) => label === 'Jun');
+    if (juneIndex === -1) return;
+
+    scrollRef.current.scrollLeft = juneIndex * (cellSize + gap);
+    hasAutoScrolled.current = true;
+  }, [monthLabels, weeks.length, cellSize, gap]);
 
   return (
     <div className="flex gap-2">
@@ -99,6 +111,7 @@ function ContributionGrid({ contributions, isDark }) {
 
       <div className="min-w-0 flex-1">
         <div
+          ref={scrollRef}
           className="github-scroll overflow-x-auto pb-1"
           style={{ scrollbarGutter: 'stable' }}
         >
@@ -316,7 +329,9 @@ export default function GitHubActivity() {
         if (cancelled) return;
 
         setContributions(data.contributions ?? []);
-        const yearList = (data.years ?? []).sort((a, b) => b.year.localeCompare(a.year));
+        const yearList = (data.years ?? [])
+          .filter((y) => (y.total ?? 0) > 0)
+          .sort((a, b) => b.year.localeCompare(a.year));
         setYears(yearList);
         setSelectedYear(yearList[0]?.year ?? null);
       } catch {
