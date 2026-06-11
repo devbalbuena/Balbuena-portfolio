@@ -64,16 +64,6 @@ const skillThemes = {
 
 const certifications = [
   {
-    title: 'AWS Certified Cloud Practitioner',
-    org: 'Amazon Web Services',
-    image: '/certs/aws.jpg',
-  },
-  {
-    title: 'Frontend Developer Certificate',
-    org: 'Meta',
-    image: '/certs/frontend.jpg',
-  },
-  {
     title: 'Cyber Resilience Bootcamp 1 – Participation',
     org: 'Urian Cybersecurity League / FSUU, Sep 2024',
     image: '/certs/bootcamp.jpg',
@@ -86,21 +76,6 @@ const certifications = [
 ];
 
 const achievements = [
-  {
-    title: "Dean's Lister",
-    period: '2022–2024',
-    image: '/awards/deans-lister.jpg',
-  },
-  {
-    title: 'Champion – University Hackathon',
-    period: '2023',
-    image: '/awards/hackathon-champion-2023.jpg',
-  },
-  {
-    title: 'Outstanding Project Award',
-    period: '2024',
-    image: '/awards/outstanding-project-2024.jpg',
-  },
   {
     title:
       '2nd Runner Up – Urian Cybersecurity League Capture the Flag (CTF) Competition',

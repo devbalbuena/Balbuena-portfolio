@@ -23,6 +23,32 @@ body {
   scrollbar-width: none;
 }
 
+.github-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.github-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.github-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.github-scroll::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.dark .github-scroll {
+  scrollbar-color: #475569 transparent;
+}
+
+.dark .github-scroll::-webkit-scrollbar-thumb {
+  background-color: #475569;
+}
+
 /* Infinite horizontal marquee — translates -50% (one duplicated set) */
 @keyframes gallery-marquee-scroll {
   to {
