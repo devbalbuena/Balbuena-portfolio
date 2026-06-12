@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FolderCode,
@@ -125,21 +125,7 @@ const modalOnlyProjects = [
 
 const allProjects = [...PINNED_PROJECTS, ...modalOnlyProjects];
 
-const FILTER_TABS = ['All', 'Laravel', 'React', 'AI', 'MySQL'];
-
 const MAX_GALLERY_PHOTOS = 20;
-
-function getFilteredPinnedProjects(filter) {
-  return PINNED_PROJECTS.filter((project) => projectMatchesFilter(project, filter));
-}
-
-function projectMatchesFilter(project, filter) {
-  if (filter === 'All') return true;
-  if (filter === 'AI') {
-    return project.tech.some((tag) => /ai|openai/i.test(tag));
-  }
-  return project.tech.some((tag) => tag.toLowerCase().includes(filter.toLowerCase()));
-}
 
 function projectHref(url) {
   return url.startsWith('http') ? url : `https://${url}`;
@@ -383,7 +369,6 @@ function PhotoGalleryModal({ project, onClose }) {
 export default function Projects() {
   const [projectsModalOpen, setProjectsModalOpen] = useState(false);
   const [galleryProject, setGalleryProject] = useState(null);
-  const [activeFilter, setActiveFilter] = useState('All');
 
   const overlayOpen = projectsModalOpen || galleryProject;
 
@@ -409,10 +394,6 @@ export default function Projects() {
     setGalleryProject(project);
   };
 
-  const displayedPinnedProjects = useMemo(
-    () => getFilteredPinnedProjects(activeFilter),
-    [activeFilter],
-  );
 
   return (
     <motion.section className="mb-14" variants={fadeInUp}>
@@ -422,33 +403,10 @@ export default function Projects() {
       </motion.div>
 
       <motion.div
-        className="flex flex-wrap gap-2 mb-6"
+        className="grid sm:grid-cols-2 gap-5"
         variants={fadeInUp}
       >
-        {FILTER_TABS.map((tab) => (
-          <button
-            key={tab}
-            type="button"
-            onClick={() => setActiveFilter(tab)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-300 ${
-              activeFilter === tab
-                ? 'bg-purple-600 text-white border-purple-600 dark:bg-purple-500 dark:border-purple-500'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-purple-300 hover:text-purple-700 dark:bg-slate-900 dark:text-slate-300 dark:border-white/10 dark:hover:border-purple-500/40 dark:hover:text-purple-300'
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </motion.div>
-
-      <motion.div
-        key={activeFilter}
-        className="grid sm:grid-cols-2 gap-5"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.25 }}
-      >
-        {displayedPinnedProjects.map((project) => (
+        {PINNED_PROJECTS.map((project) => (
           <ProjectCard
             key={project.id}
             project={project}
@@ -456,12 +414,6 @@ export default function Projects() {
           />
         ))}
       </motion.div>
-
-      {displayedPinnedProjects.length === 0 && (
-        <p className={`text-sm text-center py-8 ${mutedText}`}>
-          No pinned projects use this stack.
-        </p>
-      )}
 
       <motion.div className="flex justify-center mt-8" variants={fadeInUp}>
         <button
