@@ -1,9 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useToast } from '../context/ToastContext';
 import { primaryBtn, cardBody } from '../lib/ui';
 
 const BREVO_API_KEY = import.meta.env.VITE_BREVO_API_KEY;
-const RECIPIENT_EMAIL = 'balbuenadexter2@gmail.com';
+
+// Email split into parts to prevent bot scraping — joined at runtime only
+const EMAIL_USER = 'balbuenadexter2';
+const EMAIL_DOMAIN = 'gmail.com';
+const getRecipientEmail = () => `${EMAIL_USER}@${EMAIL_DOMAIN}`;
+
+const COOLDOWN_SECONDS = 60;
+const MAX_SENDS = 3;
 
 const inputClass =
   'w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-gray-400 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-400 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-100 dark:placeholder:text-slate-500';
@@ -14,9 +21,30 @@ export default function ContactForm() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [cooldown, setCooldown] = useState(0); // seconds remaining
+  const [sendCount, setSendCount] = useState(0);
+  const timerRef = useRef(null);
+
+  // Start the cooldown countdown after a successful send
+  const startCooldown = () => {
+    setCooldown(COOLDOWN_SECONDS);
+  };
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    timerRef.current = setTimeout(() => setCooldown((s) => s - 1), 1000);
+    return () => clearTimeout(timerRef.current);
+  }, [cooldown]);
+
+  const limitReached = sendCount >= MAX_SENDS;
+  const isCoolingDown = cooldown > 0;
+  const isDisabled = submitting || isCoolingDown || limitReached;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isDisabled) return;
+
+    const recipientEmail = getRecipientEmail();
 
     if (!BREVO_API_KEY) {
       showToast('Contact form is not configured yet.');
@@ -34,9 +62,9 @@ export default function ContactForm() {
         body: JSON.stringify({
           sender: {
             name: 'Portfolio Contact',
-            email: RECIPIENT_EMAIL,
+            email: recipientEmail,
           },
-          to: [{ email: RECIPIENT_EMAIL, name: 'Dexter Balbuena' }],
+          to: [{ email: recipientEmail, name: 'Dexter Balbuena' }],
           replyTo: { email, name },
           subject: `Portfolio message from ${name}`,
           htmlContent: `
@@ -56,11 +84,21 @@ export default function ContactForm() {
       setName('');
       setEmail('');
       setMessage('');
+      setSendCount((c) => c + 1);
+      startCooldown();
     } catch {
       showToast('Failed to send message. Please try again.');
+      // Re-enable immediately on failure — no cooldown penalty
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const getButtonLabel = () => {
+    if (submitting) return 'Sending...';
+    if (limitReached) return 'Message limit reached for this session';
+    if (isCoolingDown) return `Wait ${cooldown}s before sending again`;
+    return 'Send Message';
   };
 
   return (
@@ -93,8 +131,12 @@ export default function ContactForm() {
         onChange={(e) => setMessage(e.target.value)}
         className={`${inputClass} resize-none`}
       />
-      <button type="submit" disabled={submitting} className={`${primaryBtn} w-full justify-center`}>
-        {submitting ? 'Sending...' : 'Send Message'}
+      <button
+        type="submit"
+        disabled={isDisabled}
+        className={`${primaryBtn} w-full justify-center`}
+      >
+        {getButtonLabel()}
       </button>
     </form>
   );

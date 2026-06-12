@@ -7,7 +7,10 @@ import { useToast } from '../context/ToastContext';
 import TypewriterSubtitle from './TypewriterSubtitle';
 
 const PROFILE_SRC = '/profile.jpg';
-const EMAIL = 'balbuenadexter2@gmail.com';
+// Email split into parts to prevent bot scraping — joined at runtime only
+const EMAIL_USER = 'balbuenadexter2';
+const EMAIL_DOMAIN = 'gmail.com';
+const getEmail = () => `${EMAIL_USER}@${EMAIL_DOMAIN}`;
 
 export default function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,7 +38,7 @@ export default function Header() {
 
   const handleCopyEmail = async () => {
     try {
-      await navigator.clipboard.writeText(EMAIL);
+      await navigator.clipboard.writeText(getEmail());
       showToast('Email copied to clipboard!');
     } catch {
       showToast('Could not copy email.');

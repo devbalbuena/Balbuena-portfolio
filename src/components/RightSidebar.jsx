@@ -126,7 +126,10 @@ function SidebarBlock({ icon: Icon, title, children }) {
   );
 }
 
-const CONTACT_EMAIL = 'balbuenadexter2@gmail.com';
+// Email split into parts to prevent bot scraping — joined at runtime only
+const EMAIL_USER = 'balbuenadexter2';
+const EMAIL_DOMAIN = 'gmail.com';
+const getEmail = () => `${EMAIL_USER}@${EMAIL_DOMAIN}`;
 
 export default function RightSidebar() {
   const [imagePreview, setImagePreview] = useState(null);
@@ -134,7 +137,7 @@ export default function RightSidebar() {
 
   const handleCopyEmail = async () => {
     try {
-      await navigator.clipboard.writeText(CONTACT_EMAIL);
+      await navigator.clipboard.writeText(getEmail());
       showToast('Email copied to clipboard!');
     } catch {
       showToast('Could not copy email.');
@@ -303,7 +306,7 @@ export default function RightSidebar() {
               size={16}
               className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
             />
-            <span>{CONTACT_EMAIL}</span>
+            <span>{getEmail()}</span>
           </button>
           <a
             href="https://github.com/devbalbuena"
