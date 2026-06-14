@@ -5,7 +5,7 @@ import { cardBase, sectionIcon, sectionTitle, cardBody } from '../lib/ui';
 
 export default function About() {
   return (
-    <motion.section className="mb-14" variants={fadeInUp}>
+    <motion.section id="about" className="mb-14" variants={fadeInUp}>
       <motion.div className="flex items-center gap-2 mb-4 group" variants={fadeInUp}>
         <User className={sectionIcon} size={20} />
         <h3 className={sectionTitle}>About Me</h3>

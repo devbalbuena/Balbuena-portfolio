@@ -7,6 +7,7 @@ import Gallery from './components/Gallery';
 import RightSidebar from './components/RightSidebar';
 import DarkModeToggle from './components/DarkModeToggle';
 import ScrollProgressBar from './components/ScrollProgressBar';
+import CommandMenu from './components/CommandMenu';
 import { pageSection } from './motion/variants';
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
       <div className="pointer-events-none fixed top-[-10%] left-[-10%] -z-10 h-96 w-96 rounded-full blur-3xl bg-blue-400/15 dark:bg-blue-500/15" />
       <div className="pointer-events-none fixed bottom-[-10%] right-[-10%] -z-10 h-96 w-96 rounded-full blur-3xl bg-blue-400/15 dark:bg-blue-500/15" />
 
+      <CommandMenu />
       <ScrollProgressBar />
       <DarkModeToggle />
 

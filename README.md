@@ -1,16 +1,30 @@
-# React + Vite
+# Dexter Balbuena — Full-Stack Developer Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, high-performance portfolio built with **React**, **Vite**, **Tailwind CSS**, and **Framer Motion**.
 
-Currently, two official plugins are available:
+## 🌟 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Command Menu (Cmd+K / Ctrl+K)**: Press `Ctrl+K` (Windows/Linux) or `Cmd+K` (Mac) to open a quick search menu. Navigate to different sections (Projects, About, Gallery), toggle dark mode, copy email, or download resume instantly!
+- **Dark/Light Mode**: Full theme toggle support with system preference detection.
+- **Security First**: Comprehensive HTTP security headers and bot-protected email rendering.
+- **Contact Form**: Rate-limited, serverless email integration via Brevo API.
+- **SEO Optimized**: Fully configured Open Graph, Twitter cards, and semantic meta tags.
+- **Interactive Gallery**: Click to view full-size images in a clean, animated modal.
+- **Dynamic Animations**: Smooth scroll-reveals and staggered load animations using Framer Motion.
+- **Analytics**: Integrated Vercel Web Analytics.
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Framework**: React 19 + Vite
+- **Styling**: Tailwind CSS v4
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Command Palette**: cmdk
+- **Deployment**: Vercel
 
-## Expanding the ESLint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Add your `.env` file (e.g., `VITE_BREVO_API_KEY`)
+4. Start the dev server: `npm run dev`

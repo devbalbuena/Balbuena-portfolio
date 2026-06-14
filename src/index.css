@@ -72,3 +72,14 @@ body {
 .gallery-marquee-item {
   width: 16rem; /* matches prior w-64; aligns predictably with heading */
 }
+
+/* Command Menu overrides */
+[cmdk-group-heading] {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+.dark [cmdk-group-heading] {
+  color: #9ca3af;
+}

@@ -396,7 +396,7 @@ export default function Projects() {
 
 
   return (
-    <motion.section className="mb-14" variants={fadeInUp}>
+    <motion.section id="projects" className="mb-14" variants={fadeInUp}>
       <motion.div className="flex items-center gap-2 mb-4 group" variants={fadeInUp}>
         <FolderCode className={sectionIcon} size={20} />
         <h3 className={sectionTitle}>Projects</h3>
