@@ -347,6 +347,55 @@ export default function GitHubActivity() {
     };
   }, []);
 
+  // Fetch actual counts from Deno API to fix "0 contributions" bug from main API
+  useEffect(() => {
+    if (!selectedYear) return;
+    let cancelled = false;
+
+    async function fetchActualCounts() {
+      try {
+        const res = await fetch(`https://github-contributions-api.deno.dev/${GITHUB_USERNAME}.json?year=${selectedYear}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (cancelled) return;
+
+        const actualContributions = (data.contributions || []).flat().map((day) => {
+          let intensity = 0;
+          if (day.contributionLevel === 'FIRST_QUARTILE') intensity = 1;
+          else if (day.contributionLevel === 'SECOND_QUARTILE') intensity = 2;
+          else if (day.contributionLevel === 'THIRD_QUARTILE') intensity = 3;
+          else if (day.contributionLevel === 'FOURTH_QUARTILE') intensity = 4;
+
+          return {
+            date: day.date,
+            count: day.contributionCount,
+            intensity: String(intensity),
+          };
+        });
+
+        setContributions((prev) => {
+          const newMap = new Map(actualContributions.map((c) => [c.date, c]));
+          return prev.map((c) => (newMap.has(c.date) ? { ...c, ...newMap.get(c.date) } : c));
+        });
+
+        if (typeof data.totalContributions === 'number') {
+          setYears((prev) =>
+            prev.map((y) =>
+              y.year === selectedYear ? { ...y, total: data.totalContributions } : y
+            )
+          );
+        }
+      } catch {
+        // ignore fallback errors
+      }
+    }
+
+    fetchActualCounts();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedYear]);
+
   useEffect(() => {
     let cancelled = false;
 
