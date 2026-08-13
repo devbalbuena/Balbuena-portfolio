@@ -27,7 +27,7 @@ export function ToastProvider({ children }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.25 }}
-            className="fixed bottom-6 right-6 z-[200] max-w-xs rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 shadow-lg dark:border-white/10 dark:bg-slate-900 dark:text-slate-100"
+            className="fixed bottom-20 right-6 z-[200] max-w-xs rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 shadow-lg dark:border-white/10 dark:bg-slate-900 dark:text-slate-100"
             role="status"
             aria-live="polite"
           >

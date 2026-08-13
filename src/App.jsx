@@ -8,6 +8,7 @@ import RightSidebar from './components/RightSidebar';
 import DarkModeToggle from './components/DarkModeToggle';
 import ScrollProgressBar from './components/ScrollProgressBar';
 import CommandMenu from './components/CommandMenu';
+import BackToTop from './components/BackToTop';
 import { pageSection } from './motion/variants';
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
       <CommandMenu />
       <ScrollProgressBar />
       <DarkModeToggle />
+      <BackToTop />
 
       <motion.div
         className="relative w-full max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-12 lg:py-20"
