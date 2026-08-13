@@ -49,6 +49,34 @@ const photos = [
 
 const marqueePhotos = [...photos, ...photos];
 
+function GalleryImage({ photo }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  return (
+    <div className="relative w-full h-full">
+      {/* Skeleton loader */}
+      {!isLoaded && !hasError && (
+        <div className="absolute inset-0 z-10 animate-pulse bg-slate-200 dark:bg-slate-700/60" />
+      )}
+      
+      <img
+        src={photo.src}
+        alt={photo.alt}
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setHasError(true)}
+        className={`w-full h-full object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${hasError ? 'hidden' : 'block'}`}
+      />
+      
+      {hasError && (
+        <span className="absolute inset-0 flex items-center justify-center text-sm font-medium text-slate-500 dark:text-slate-300 px-2">
+          {photo.label}
+        </span>
+      )}
+    </div>
+  );
+}
+
 export default function Gallery() {
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -88,19 +116,7 @@ export default function Gallery() {
                 aria-label={`Open ${photo.alt}`}
                 className={`gallery-marquee-item h-40 sm:h-44 shrink-0 overflow-hidden ${photo.color} ${cardInteractive} cursor-pointer p-0 text-left`}
               >
-                <img
-                  src={photo.src}
-                  alt={photo.alt}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    const fallback = e.currentTarget.nextElementSibling;
-                    if (fallback) fallback.classList.remove('hidden');
-                  }}
-                />
-                <span className="hidden w-full h-full flex items-center justify-center text-sm font-medium text-slate-500 dark:text-slate-300 px-2">
-                  {photo.label}
-                </span>
+                <GalleryImage photo={photo} />
               </button>
             ))}
           </div>
