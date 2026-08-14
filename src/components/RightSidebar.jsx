@@ -11,6 +11,7 @@ import {
   Mail,
   Phone,
   X,
+  Share2,
 } from 'lucide-react';
 import { fadeInUp, staggerContainer } from '../motion/variants';
 import {
@@ -141,6 +142,15 @@ export default function RightSidebar() {
       showToast('Email copied to clipboard!');
     } catch {
       showToast('Could not copy email.');
+    }
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      showToast('Portfolio link copied to clipboard!');
+    } catch {
+      showToast('Could not copy link.');
     }
   };
 
@@ -332,6 +342,18 @@ export default function RightSidebar() {
             />
             <span>linkedin.com/in/dexterbalbuena</span>
           </a>
+          
+          <div className="pt-2 pb-2">
+            <button
+              type="button"
+              onClick={handleCopyLink}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-sm transition-all duration-300 border border-slate-200/60 dark:border-slate-700/60"
+            >
+              <Share2 size={16} className={accentIcon} />
+              Share Portfolio
+            </button>
+          </div>
+          
           <ContactForm />
         </motion.div>
       </SidebarBlock>
