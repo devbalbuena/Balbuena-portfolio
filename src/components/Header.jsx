@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BadgeCheck, MapPin, Download, Mail, GitBranch as Github } from 'lucide-react';
+import { BadgeCheck, MapPin, Download, Mail, GitBranch as Github, Code2 } from 'lucide-react';
 import { fadeInUp } from '../motion/variants';
 import { primaryBtn, secondaryBtn } from '../lib/ui';
 import { useToast } from '../context/ToastContext';
@@ -118,6 +118,15 @@ export default function Header() {
               >
                 <Github size={16} />
                 GitHub
+              </a>
+              <a
+                href="https://leetcode.com/u/devbalbuena/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={secondaryBtn}
+              >
+                <Code2 size={16} />
+                LeetCode
               </a>
             </motion.div>
           </div>

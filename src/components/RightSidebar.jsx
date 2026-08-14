@@ -12,6 +12,7 @@ import {
   Phone,
   X,
   Share2,
+  Code2,
 } from 'lucide-react';
 import { fadeInUp, staggerContainer } from '../motion/variants';
 import {
@@ -341,6 +342,18 @@ export default function RightSidebar() {
               className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
             />
             <span>linkedin.com/in/dexterbalbuena</span>
+          </a>
+          <a
+            href="https://leetcode.com/u/devbalbuena/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`group flex items-center gap-3 text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent}`}
+          >
+            <Code2
+              size={16}
+              className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
+            />
+            <span>leetcode.com/u/devbalbuena</span>
           </a>
           
           <div className="pt-2 pb-2">

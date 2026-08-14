@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Command } from 'cmdk';
-import { FolderCode, User, Image, Moon, Sun, Mail, Download } from 'lucide-react';
+import { FolderCode, User, Image, Moon, Sun, Mail, Download, Code2 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useToast } from '../context/ToastContext';
 
@@ -127,6 +127,13 @@ export default function CommandMenu() {
             >
               <Download size={16} />
               Download Resume
+            </Command.Item>
+            <Command.Item 
+              onSelect={() => runCommand(() => window.open('https://leetcode.com/u/devbalbuena/', '_blank'))}
+              className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 mt-1 text-sm text-slate-800 dark:text-slate-200 aria-selected:bg-gray-100 dark:aria-selected:bg-slate-800 transition-colors"
+            >
+              <Code2 size={16} />
+              Open LeetCode Profile
             </Command.Item>
           </Command.Group>
         </Command.List>
