@@ -61,11 +61,11 @@ const PINNED_PROJECTS = [
   },
   {
     id: 4,
-    title: 'AskDocPh',
-    slug: 'askdocph',
-    description: 'Online doctor consultation and appointment booking platform',
-    tech: ['Laravel', 'Blade', 'MySQL'],
-    sourceCode: 'github.com/devbalbuena/AskDocPh',
+    title: 'HapsayPrint',
+    slug: 'hapsayprint',
+    description: 'A modern printing service management and tracking system.',
+    tech: ['React', 'Laravel', 'Tailwind CSS'],
+    sourceCode: 'github.com/devbalbuena/HapsayPrint',
   },
 ];
 
@@ -120,6 +120,22 @@ const modalOnlyProjects = [
     description: 'Movie streaming mobile APK application',
     tech: ['TypeScript'],
     sourceCode: 'github.com/devbalbuena/WatchFlix-Apk',
+  },
+  {
+    id: 11,
+    title: 'AskDocPh',
+    slug: 'askdocph',
+    description: 'Online doctor consultation and appointment booking platform',
+    tech: ['Laravel', 'Blade', 'MySQL'],
+    sourceCode: 'github.com/devbalbuena/AskDocPh',
+  },
+  {
+    id: 12,
+    title: 'Kausap AI',
+    slug: 'kausap-ai',
+    description: 'AI-powered conversational chatbot and virtual assistant',
+    tech: ['React', 'OpenAI API', 'Tailwind CSS'],
+    sourceCode: 'github.com/devbalbuena/Kausap-AI',
   },
 ];
 
