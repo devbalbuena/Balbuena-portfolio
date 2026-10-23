@@ -4,6 +4,7 @@ import { GitBranch as Github, ArrowUpRight } from 'lucide-react';
 import { springFadeIn } from '../motion/variants';
 import { cardBase, sectionTitleSm, accentIcon, linkAccent } from '../lib/ui';
 import { useTheme } from '../context/ThemeContext';
+import SpotlightCard from './SpotlightCard';
 
 const GITHUB_USERNAME = 'devbalbuena';
 const GITHUB_PROFILE = `https://github.com/${GITHUB_USERNAME}`;
@@ -444,7 +445,7 @@ export default function GitHubActivity() {
         <h3 className={sectionTitleSm}>GitHub Activity</h3>
       </div>
 
-      <motion.div className={`${cardBase} p-5 space-y-4`} variants={springFadeIn}>
+      <SpotlightCard as={motion.div} className={`${cardBase} p-5 space-y-4`} variants={springFadeIn}>
         {loading ? (
           <div className="space-y-3 animate-pulse">
             <div className="h-3 w-40 rounded bg-slate-200 dark:bg-slate-700" />
@@ -517,7 +518,7 @@ export default function GitHubActivity() {
           <span>View profile on GitHub</span>
           <ArrowUpRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
         </a>
-      </motion.div>
+      </SpotlightCard>
     </motion.section>
   );
 }
