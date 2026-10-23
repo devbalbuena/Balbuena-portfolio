@@ -21,8 +21,15 @@ export default function CommandMenu() {
         setOpen((open) => !open);
       }
     };
+    const handleOpenEvent = () => setOpen(true);
+
     document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
+    window.addEventListener('open-command-menu', handleOpenEvent);
+
+    return () => {
+      document.removeEventListener('keydown', down);
+      window.removeEventListener('open-command-menu', handleOpenEvent);
+    };
   }, []);
 
   const runCommand = (command) => {
