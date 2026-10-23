@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { fadeInUp, springFadeIn, staggerContainer, slidePhotoVariants } from '../motion/variants';
 import MagneticButton from './MagneticButton';
+import SpotlightCard from './SpotlightCard';
 import {
   cardInteractive,
   sectionIcon,
@@ -178,9 +179,10 @@ function ProjectCard({ project, onViewPhotos, variants = fadeInUp }) {
   const previewSrc = previewPath(project.slug);
 
   return (
-    <motion.article
+    <SpotlightCard
+      as={motion.article}
       variants={variants}
-      className={`group flex flex-col overflow-hidden ${cardInteractive}`}
+      className={`group flex flex-col ${cardInteractive}`}
     >
       <div
         className={`relative w-full h-40 ${projectPlaceholder} flex items-center justify-center overflow-hidden`}
@@ -205,7 +207,7 @@ function ProjectCard({ project, onViewPhotos, variants = fadeInUp }) {
         </div>
       </div>
 
-      <div className="p-4 flex flex-col flex-1">
+      <div className="p-4 flex flex-col flex-1 relative z-10">
         <h4 className={`${cardTitle} mb-2`}>{project.title}</h4>
         <p className={`text-sm ${cardBody} mb-3 flex-1`}>{project.description}</p>
 
@@ -234,7 +236,7 @@ function ProjectCard({ project, onViewPhotos, variants = fadeInUp }) {
           </button>
         </div>
       </div>
-    </motion.article>
+    </SpotlightCard>
   );
 }
 
@@ -416,8 +418,23 @@ function PhotoGalleryModal({ project, onClose }) {
 export default function Projects() {
   const [projectsModalOpen, setProjectsModalOpen] = useState(false);
   const [galleryProject, setGalleryProject] = useState(null);
+  const [activeCategory, setActiveCategory] = useState('All');
 
   const overlayOpen = projectsModalOpen || galleryProject;
+
+  const filteredProjects = PINNED_PROJECTS.filter((project) => {
+    if (activeCategory === 'All') return true;
+    if (activeCategory === 'AI & Automation') {
+      return project.tech.some((t) => t.includes('OpenAI') || t.includes('AI'));
+    }
+    if (activeCategory === 'Laravel & PHP') {
+      return project.tech.some((t) => t.includes('Laravel') || t.includes('PHP') || t.includes('Blade'));
+    }
+    if (activeCategory === 'Full-Stack') {
+      return project.tech.some((t) => t.includes('React') || t.includes('Laravel'));
+    }
+    return true;
+  });
 
   useEffect(() => {
     if (!overlayOpen) return;
@@ -441,7 +458,6 @@ export default function Projects() {
     setGalleryProject(project);
   };
 
-
   return (
     <motion.section
       id="projects"
@@ -451,16 +467,37 @@ export default function Projects() {
       whileInView="visible"
       viewport={{ once: true, margin: '-50px' }}
     >
-      <motion.div className="flex items-center gap-2 mb-4 group" variants={springFadeIn}>
-        <FolderCode className={sectionIcon} size={20} />
-        <h3 className={sectionTitle}>Projects</h3>
-      </motion.div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+        <motion.div className="flex items-center gap-2 group" variants={springFadeIn}>
+          <FolderCode className={sectionIcon} size={20} />
+          <h3 className={sectionTitle}>Featured Projects</h3>
+        </motion.div>
+
+        {/* Category Filter Pills */}
+        <div className="flex flex-wrap gap-1 p-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 shadow-xs">
+          {['All', 'AI & Automation', 'Full-Stack', 'Laravel & PHP'].map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setActiveCategory(cat)}
+              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                activeCategory === cat
+                  ? 'bg-purple-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <motion.div
+        layout
         className="grid sm:grid-cols-2 gap-5"
         variants={staggerContainer}
       >
-        {PINNED_PROJECTS.map((project) => (
+        {filteredProjects.map((project) => (
           <ProjectCard
             key={project.id}
             project={project}
