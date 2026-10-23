@@ -2,6 +2,14 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+  --grid-dot-color: rgba(148, 163, 184, 0.32);
+}
+
+.dark {
+  --grid-dot-color: rgba(255, 255, 255, 0.09);
+}
+
 body {
   margin: 0;
   font-family: 'Inter', system-ui, sans-serif;
