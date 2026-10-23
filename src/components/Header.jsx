@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BadgeCheck, MapPin, Download, Mail, GitBranch as Github, Code2, ArrowUpRight } from 'lucide-react';
-import { fadeInUp } from '../motion/variants';
-import { primaryBtn, secondaryBtn } from '../lib/ui';
+import { fadeInUp, springFadeIn } from '../motion/variants';
+import { cardBase, primaryBtn, secondaryBtn } from '../lib/ui';
 import { useToast } from '../context/ToastContext';
 import TypewriterSubtitle from './TypewriterSubtitle';
 import MagneticButton from './MagneticButton';
+import SpotlightCard from './SpotlightCard';
 
 const PROFILE_SRC = '/profile.jpg';
 // Email split into parts to prevent bot scraping — joined at runtime only
@@ -48,18 +49,28 @@ export default function Header() {
 
   return (
     <>
-      <motion.header className="mb-12 relative" variants={fadeInUp}>
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+      <SpotlightCard
+        as={motion.header}
+        className={`${cardBase} p-6 sm:p-8 relative w-full h-full flex flex-col justify-between`}
+        variants={springFadeIn}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Soft background ambient gradient */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/[0.06] dark:bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 relative z-10">
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
             aria-label="View profile picture"
-            className="shrink-0 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
+            className="group shrink-0 relative rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           >
+            <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 opacity-20 group-hover:opacity-60 blur-xs transition duration-300" />
             <img
               src={PROFILE_SRC}
               alt="Dexter Balbuena"
-              className="w-32 h-32 object-cover rounded-full shadow-sm dark:shadow-none border border-slate-100 dark:border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:hover:shadow-none cursor-pointer"
+              className="relative w-32 h-32 object-cover rounded-full border-2 border-white dark:border-slate-800 transition-all duration-300 group-hover:scale-105 cursor-pointer shadow-sm"
             />
           </button>
 
@@ -142,7 +153,7 @@ export default function Header() {
             </motion.div>
           </div>
         </div>
-      </motion.header>
+      </SpotlightCard>
 
       <AnimatePresence>
         {isModalOpen && (
