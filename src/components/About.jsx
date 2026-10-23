@@ -1,16 +1,23 @@
 import { motion } from 'framer-motion';
 import { User } from 'lucide-react';
-import { fadeInUp } from '../motion/variants';
+import { springFadeIn } from '../motion/variants';
 import { cardBase, sectionIcon, sectionTitle, cardBody } from '../lib/ui';
 
 export default function About() {
   return (
-    <motion.section id="about" className="mb-14" variants={fadeInUp}>
-      <motion.div className="flex items-center gap-2 mb-4 group" variants={fadeInUp}>
+    <motion.section
+      id="about"
+      className="mb-14"
+      variants={springFadeIn}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-50px' }}
+    >
+      <motion.div className="flex items-center gap-2 mb-4 group" variants={springFadeIn}>
         <User className={sectionIcon} size={20} />
         <h3 className={sectionTitle}>About Me</h3>
       </motion.div>
-      <motion.div className={`${cardBase} p-6`} variants={fadeInUp}>
+      <motion.div className={`${cardBase} p-6`} variants={springFadeIn}>
         <div className={`space-y-4 leading-relaxed text-[15px] ${cardBody}`}>
           <p>
             I'm a 3rd-year IT student at{' '}

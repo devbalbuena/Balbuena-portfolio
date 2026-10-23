@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BadgeCheck, MapPin, Download, Mail, GitBranch as Github, Code2 } from 'lucide-react';
+import { BadgeCheck, MapPin, Download, Mail, GitBranch as Github, Code2, ArrowUpRight } from 'lucide-react';
 import { fadeInUp } from '../motion/variants';
 import { primaryBtn, secondaryBtn } from '../lib/ui';
 import { useToast } from '../context/ToastContext';
 import TypewriterSubtitle from './TypewriterSubtitle';
+import MagneticButton from './MagneticButton';
 
 const PROFILE_SRC = '/profile.jpg';
 // Email split into parts to prevent bot scraping — joined at runtime only
@@ -97,37 +98,47 @@ export default function Header() {
               className="flex flex-wrap items-center justify-center md:justify-start gap-3"
               variants={fadeInUp}
             >
-              <a
-                href="/cv.pdf"
-                download
-                onClick={handleDownloadResume}
-                className={primaryBtn}
-              >
-                <Download size={16} />
-                Download Resume
-              </a>
-              <button type="button" onClick={handleCopyEmail} className={secondaryBtn}>
-                <Mail size={16} />
-                Copy Email
-              </button>
-              <a
-                href="https://github.com/devbalbuena"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={secondaryBtn}
-              >
-                <Github size={16} />
-                GitHub
-              </a>
-              <a
-                href="https://leetcode.com/u/devbalbuena/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={secondaryBtn}
-              >
-                <Code2 size={16} />
-                LeetCode
-              </a>
+              <MagneticButton>
+                <a
+                  href="/cv.pdf"
+                  download
+                  onClick={handleDownloadResume}
+                  className={primaryBtn}
+                >
+                  <Download size={16} className="group-hover:-translate-y-0.5 transition-transform duration-200" />
+                  Download Resume
+                </a>
+              </MagneticButton>
+              <MagneticButton>
+                <button type="button" onClick={handleCopyEmail} className={secondaryBtn}>
+                  <Mail size={16} className="group-hover:scale-110 transition-transform duration-200" />
+                  Copy Email
+                </button>
+              </MagneticButton>
+              <MagneticButton>
+                <a
+                  href="https://github.com/devbalbuena"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={secondaryBtn}
+                >
+                  <Github size={16} />
+                  <span>GitHub</span>
+                  <ArrowUpRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
+                </a>
+              </MagneticButton>
+              <MagneticButton>
+                <a
+                  href="https://leetcode.com/u/devbalbuena/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={secondaryBtn}
+                >
+                  <Code2 size={16} />
+                  <span>LeetCode</span>
+                  <ArrowUpRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
+                </a>
+              </MagneticButton>
             </motion.div>
           </div>
         </div>

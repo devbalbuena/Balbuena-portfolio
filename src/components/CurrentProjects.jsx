@@ -1,17 +1,23 @@
 import { motion } from 'framer-motion';
 import { Briefcase } from 'lucide-react';
-import { fadeInUp } from '../motion/variants';
+import { springFadeIn } from '../motion/variants';
 import { cardBase, sectionIcon, sectionTitle, cardTitle, cardBody } from '../lib/ui';
 
 export default function CurrentProjects() {
   return (
-    <motion.section className="mb-14" variants={fadeInUp}>
-      <motion.div className="flex items-center gap-2 mb-4 group" variants={fadeInUp}>
+    <motion.section
+      className="mb-14"
+      variants={springFadeIn}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-50px' }}
+    >
+      <motion.div className="flex items-center gap-2 mb-4 group" variants={springFadeIn}>
         <Briefcase className={sectionIcon} size={20} />
         <h3 className={sectionTitle}>Current Projects & Research</h3>
       </motion.div>
 
-      <motion.div className={`${cardBase} p-6`} variants={fadeInUp}>
+      <motion.div className={`${cardBase} p-6`} variants={springFadeIn}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3">
           <h4 className={cardTitle}>Lead Developer & Researcher</h4>
           <span className="text-sm font-medium text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-500/20 border border-purple-100 dark:border-purple-500/30 px-2.5 py-1 rounded-md mt-2 sm:mt-0 inline-block w-max">

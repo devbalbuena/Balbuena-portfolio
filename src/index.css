@@ -5,7 +5,7 @@
 body {
   margin: 0;
   font-family: 'Inter', system-ui, sans-serif;
-  background-color: #ffffff;
+  background-color: #f1f5f9;
   color: #1e293b;
 }
 
@@ -61,7 +61,9 @@ body {
   width: max-content;
   gap: 1rem;
   animation: gallery-marquee-scroll 35s linear infinite;
+  will-change: transform;
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   .gallery-marquee-track {
@@ -71,6 +73,35 @@ body {
 
 .gallery-marquee-item {
   width: 16rem; /* matches prior w-64; aligns predictably with heading */
+  user-select: none;
+}
+
+/* Shimmer light sweep micro-interaction on primary buttons */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -130%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.btn-shimmer:hover::before {
+  left: 130%;
 }
 
 /* Command Menu overrides */
@@ -83,3 +114,4 @@ body {
 .dark [cmdk-group-heading] {
   color: #9ca3af;
 }
+

@@ -14,7 +14,7 @@ import { pageSection } from './motion/variants';
 export default function App() {
   return (
     <motion.div
-      className="relative isolate min-h-screen overflow-hidden bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-200"
+      className="relative isolate min-h-screen overflow-hidden bg-[#f1f5f9] dark:bg-slate-950 text-slate-800 dark:text-slate-200"
       initial="hidden"
       animate="visible"
       variants={{
@@ -23,8 +23,8 @@ export default function App() {
         },
       }}
     >
-      <div className="pointer-events-none fixed top-[-10%] left-[-10%] -z-10 h-96 w-96 rounded-full blur-3xl bg-blue-400/15 dark:bg-blue-500/15" />
-      <div className="pointer-events-none fixed bottom-[-10%] right-[-10%] -z-10 h-96 w-96 rounded-full blur-3xl bg-blue-400/15 dark:bg-blue-500/15" />
+      <div className="pointer-events-none fixed top-[-10%] left-[-10%] -z-10 h-[520px] w-[520px] rounded-full blur-3xl bg-indigo-500/[0.07] dark:bg-blue-500/15" />
+      <div className="pointer-events-none fixed bottom-[-10%] right-[-10%] -z-10 h-[520px] w-[520px] rounded-full blur-3xl bg-purple-500/[0.07] dark:bg-blue-500/15" />
 
       <CommandMenu />
       <ScrollProgressBar />

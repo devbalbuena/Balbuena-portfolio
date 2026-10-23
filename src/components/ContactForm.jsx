@@ -13,7 +13,7 @@ const COOLDOWN_SECONDS = 60;
 const MAX_SENDS = 3;
 
 const inputClass =
-  'w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-gray-400 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-400 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-100 dark:placeholder:text-slate-500';
+  'w-full rounded-lg border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-gray-400 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-400 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-100 dark:placeholder:text-slate-500';
 
 export default function ContactForm() {
   const { showToast } = useToast();
@@ -102,7 +102,7 @@ export default function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3 pt-2 border-t border-gray-100 dark:border-white/10">
+    <form onSubmit={handleSubmit} className="space-y-3 pt-2 border-t border-slate-200/80 dark:border-white/10">
       <p className={`text-xs ${cardBody}`}>Send a message</p>
       <input
         type="text"

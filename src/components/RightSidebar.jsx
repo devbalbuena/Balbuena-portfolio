@@ -13,8 +13,9 @@ import {
   X,
   Share2,
   Code2,
+  ArrowUpRight,
 } from 'lucide-react';
-import { fadeInUp, staggerContainer } from '../motion/variants';
+import { fadeInUp, springFadeIn, staggerContainer } from '../motion/variants';
 import {
   cardBase,
   sectionTitleSm,
@@ -118,7 +119,12 @@ const skillGroups = [
 
 function SidebarBlock({ icon: Icon, title, children }) {
   return (
-    <motion.section variants={fadeInUp}>
+    <motion.section
+      variants={springFadeIn}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-40px' }}
+    >
       <div className="flex items-center gap-2 mb-4 group">
         <Icon className={accentIcon} size={18} />
         <h3 className={sectionTitleSm}>{title}</h3>
@@ -323,37 +329,46 @@ export default function RightSidebar() {
             href="https://github.com/devbalbuena"
             target="_blank"
             rel="noopener noreferrer"
-            className={`group flex items-center gap-3 text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent}`}
+            className={`group flex items-center justify-between text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent}`}
           >
-            <Github
-              size={16}
-              className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
-            />
-            <span>github.com/devbalbuena</span>
+            <div className="flex items-center gap-3">
+              <Github
+                size={16}
+                className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
+              />
+              <span>github.com/devbalbuena</span>
+            </div>
+            <ArrowUpRight size={14} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
           </a>
           <a
             href="https://linkedin.com/in/dexterbalbuena"
             target="_blank"
             rel="noopener noreferrer"
-            className={`group flex items-center gap-3 text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent}`}
+            className={`group flex items-center justify-between text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent}`}
           >
-            <Linkedin
-              size={16}
-              className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
-            />
-            <span>linkedin.com/in/dexterbalbuena</span>
+            <div className="flex items-center gap-3">
+              <Linkedin
+                size={16}
+                className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
+              />
+              <span>linkedin.com/in/dexterbalbuena</span>
+            </div>
+            <ArrowUpRight size={14} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
           </a>
           <a
             href="https://leetcode.com/u/devbalbuena/"
             target="_blank"
             rel="noopener noreferrer"
-            className={`group flex items-center gap-3 text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent}`}
+            className={`group flex items-center justify-between text-sm text-gray-600 dark:text-slate-300 transition-all duration-300 hover:-translate-y-0.5 ${linkAccent}`}
           >
-            <Code2
-              size={16}
-              className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
-            />
-            <span>leetcode.com/u/devbalbuena</span>
+            <div className="flex items-center gap-3">
+              <Code2
+                size={16}
+                className={`${accentIcon} transition-colors duration-300 group-hover:text-purple-800 dark:group-hover:text-purple-200`}
+              />
+              <span>leetcode.com/u/devbalbuena</span>
+            </div>
+            <ArrowUpRight size={14} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
           </a>
           
           <div className="pt-2 pb-2">

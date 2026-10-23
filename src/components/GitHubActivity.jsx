@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { GitBranch as Github } from 'lucide-react';
-import { fadeInUp } from '../motion/variants';
+import { GitBranch as Github, ArrowUpRight } from 'lucide-react';
+import { springFadeIn } from '../motion/variants';
 import { cardBase, sectionTitleSm, accentIcon, linkAccent } from '../lib/ui';
 import { useTheme } from '../context/ThemeContext';
 
@@ -230,7 +230,7 @@ function LanguageDonut({ languages }) {
   });
 
   return (
-    <div className="rounded-lg border border-gray-100 bg-slate-50 p-4 dark:border-white/10 dark:bg-slate-800/50">
+    <div className="rounded-lg border border-slate-200/90 bg-slate-50/70 p-4 dark:border-white/10 dark:bg-slate-800/50">
       <p className="mb-3 text-sm font-semibold text-slate-800 dark:text-slate-100">
         Top Languages by Repo
       </p>
@@ -433,13 +433,18 @@ export default function GitHubActivity() {
   const intensityColors = isDark ? INTENSITY_COLORS.dark : INTENSITY_COLORS.light;
 
   return (
-    <motion.section variants={fadeInUp}>
+    <motion.section
+      variants={springFadeIn}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-40px' }}
+    >
       <div className="flex items-center gap-2 mb-4 group">
         <Github className={accentIcon} size={18} />
         <h3 className={sectionTitleSm}>GitHub Activity</h3>
       </div>
 
-      <motion.div className={`${cardBase} p-5 space-y-4`} variants={fadeInUp}>
+      <motion.div className={`${cardBase} p-5 space-y-4`} variants={springFadeIn}>
         {loading ? (
           <div className="space-y-3 animate-pulse">
             <div className="h-3 w-40 rounded bg-slate-200 dark:bg-slate-700" />
@@ -506,10 +511,11 @@ export default function GitHubActivity() {
           href={GITHUB_PROFILE}
           target="_blank"
           rel="noopener noreferrer"
-          className={`inline-flex items-center gap-2 text-sm font-medium ${linkAccent}`}
+          className={`group inline-flex items-center gap-2 text-sm font-medium ${linkAccent}`}
         >
           <Github size={16} className={accentIcon} />
-          View profile on GitHub
+          <span>View profile on GitHub</span>
+          <ArrowUpRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
         </a>
       </motion.div>
     </motion.section>

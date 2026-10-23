@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FolderCode,
@@ -9,8 +9,10 @@ import {
   Images,
   ChevronLeft,
   ChevronRight,
+  ArrowUpRight,
 } from 'lucide-react';
-import { fadeInUp, staggerContainer } from '../motion/variants';
+import { fadeInUp, springFadeIn, staggerContainer, slidePhotoVariants } from '../motion/variants';
+import MagneticButton from './MagneticButton';
 import {
   cardInteractive,
   sectionIcon,
@@ -23,8 +25,9 @@ import {
   secondaryBtn,
 } from '../lib/ui';
 
+
 const projectPlaceholder =
-  'bg-violet-100 dark:bg-slate-800 dark:border-b dark:border-white/5';
+  'bg-slate-100 dark:bg-slate-800 dark:border-b dark:border-white/5';
 
 const linkClass = `inline-flex items-center gap-1.5 text-xs font-medium ${mutedText} ${linkAccent}`;
 const linkIconClass =
@@ -161,11 +164,12 @@ function CardLink({ href, icon: Icon, label }) {
       href={projectHref(href)}
       target="_blank"
       rel="noopener noreferrer"
-      className={linkClass}
+      className="group/link inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-slate-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors duration-200"
       onClick={(e) => e.stopPropagation()}
     >
-      <Icon size={14} className={linkIconClass} />
-      {label}
+      <Icon size={14} className="transition-colors duration-200 group-hover/link:text-purple-700 dark:group-hover/link:text-purple-300" />
+      <span>{label}</span>
+      <ArrowUpRight size={12} className="opacity-60 group-hover/link:opacity-100 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-all duration-200" />
     </a>
   );
 }
@@ -239,6 +243,7 @@ function PhotoGalleryModal({ project, onClose }) {
     photoPaths(project.slug, project.photoCount ?? MAX_GALLERY_PHOTOS),
   );
   const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
   const removePhotoAt = (indexToRemove) => {
     setPhotos((prev) => prev.filter((_, i) => i !== indexToRemove));
@@ -249,13 +254,29 @@ function PhotoGalleryModal({ project, onClose }) {
     });
   };
 
-  const goPrev = () => {
+  const goPrev = useCallback(() => {
+    setDirection(-1);
     setActiveIndex((i) => (i === 0 ? photos.length - 1 : i - 1));
-  };
+  }, [photos.length]);
 
-  const goNext = () => {
+  const goNext = useCallback(() => {
+    setDirection(1);
     setActiveIndex((i) => (i === photos.length - 1 ? 0 : i + 1));
-  };
+  }, [photos.length]);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goPrev();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        goNext();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [goPrev, goNext]);
 
   return (
     <motion.div
@@ -306,16 +327,23 @@ function PhotoGalleryModal({ project, onClose }) {
         <div className="flex flex-col min-h-0 p-3 sm:p-4 overflow-hidden">
           <div className="relative mb-3 shrink-0">
             <div
-              className={`w-full h-[min(70vh,720px)] rounded-xl overflow-hidden ${projectPlaceholder} flex items-center justify-center`}
+              className={`relative w-full h-[min(70vh,720px)] rounded-xl overflow-hidden ${projectPlaceholder} flex items-center justify-center`}
             >
               {photos.length > 0 ? (
-                <img
-                  key={photos[activeIndex]}
-                  src={photos[activeIndex]}
-                  alt={`${project.title} photo ${activeIndex + 1}`}
-                  className="w-full h-full object-contain"
-                  onError={() => removePhotoAt(activeIndex)}
-                />
+                <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+                  <motion.img
+                    key={photos[activeIndex]}
+                    src={photos[activeIndex]}
+                    alt={`${project.title} photo ${activeIndex + 1}`}
+                    custom={direction}
+                    variants={slidePhotoVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    className="w-full h-full object-contain"
+                    onError={() => removePhotoAt(activeIndex)}
+                  />
+                </AnimatePresence>
               ) : (
                 <div className="flex flex-col items-center justify-center gap-2 text-gray-500 dark:text-slate-500">
                   <LayoutGrid
@@ -334,16 +362,16 @@ function PhotoGalleryModal({ project, onClose }) {
                 <button
                   type="button"
                   onClick={goPrev}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full p-2 bg-black/50 text-white hover:bg-black/70 transition-colors duration-300"
-                  aria-label="Previous photo"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full p-2 bg-black/50 text-white hover:bg-black/70 hover:scale-110 active:scale-95 transition-all duration-200"
+                  aria-label="Previous photo (Left Arrow)"
                 >
                   <ChevronLeft size={22} />
                 </button>
                 <button
                   type="button"
                   onClick={goNext}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full p-2 bg-black/50 text-white hover:bg-black/70 transition-colors duration-300"
-                  aria-label="Next photo"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full p-2 bg-black/50 text-white hover:bg-black/70 hover:scale-110 active:scale-95 transition-all duration-200"
+                  aria-label="Next photo (Right Arrow)"
                 >
                   <ChevronRight size={22} />
                 </button>
@@ -357,11 +385,14 @@ function PhotoGalleryModal({ project, onClose }) {
                 <button
                   key={src}
                   type="button"
-                  onClick={() => setActiveIndex(index)}
+                  onClick={() => {
+                    setDirection(index > activeIndex ? 1 : -1);
+                    setActiveIndex(index);
+                  }}
                   className={`shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
                     index === activeIndex
-                      ? 'border-purple-600 dark:border-purple-400 ring-2 ring-purple-200 dark:ring-purple-500/30'
-                      : 'border-transparent opacity-70 hover:opacity-100'
+                      ? 'border-purple-600 dark:border-purple-400 ring-2 ring-purple-200 dark:ring-purple-500/30 scale-105'
+                      : 'border-transparent opacity-70 hover:opacity-100 hover:scale-100'
                   }`}
                   aria-label={`View photo ${index + 1}`}
                   aria-current={index === activeIndex ? 'true' : undefined}
@@ -412,15 +443,22 @@ export default function Projects() {
 
 
   return (
-    <motion.section id="projects" className="mb-14" variants={fadeInUp}>
-      <motion.div className="flex items-center gap-2 mb-4 group" variants={fadeInUp}>
+    <motion.section
+      id="projects"
+      className="mb-14"
+      variants={springFadeIn}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-50px' }}
+    >
+      <motion.div className="flex items-center gap-2 mb-4 group" variants={springFadeIn}>
         <FolderCode className={sectionIcon} size={20} />
         <h3 className={sectionTitle}>Projects</h3>
       </motion.div>
 
       <motion.div
         className="grid sm:grid-cols-2 gap-5"
-        variants={fadeInUp}
+        variants={staggerContainer}
       >
         {PINNED_PROJECTS.map((project) => (
           <ProjectCard
@@ -431,14 +469,16 @@ export default function Projects() {
         ))}
       </motion.div>
 
-      <motion.div className="flex justify-center mt-8" variants={fadeInUp}>
-        <button
-          type="button"
-          onClick={() => setProjectsModalOpen(true)}
-          className={secondaryBtn}
-        >
-          View All Projects
-        </button>
+      <motion.div className="flex justify-center mt-8" variants={springFadeIn}>
+        <MagneticButton>
+          <button
+            type="button"
+            onClick={() => setProjectsModalOpen(true)}
+            className={secondaryBtn}
+          >
+            View All Projects
+          </button>
+        </MagneticButton>
       </motion.div>
 
       <AnimatePresence>
